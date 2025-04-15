@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zest</title>
+
+    <style>
+        /* 網頁的基本樣式 */
+        body {
+            font-family: "Press Start 2P", sans-serif;
+            margin: 0;
+            padding: 0;
+            background: black; /*url('/material/gameboyframe.png') no-repeat center top; */
+            align-items: center;
+            position: relative; /* 讓內部元素可以絕對定位 */
+
+        }
+
+        .header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+        }
+
+        .title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%); /* 只水平置中 */
+            color: white;
+            font-size: 50px;
+        }
+
+        /* 背景音樂開關按鈕 */
+        .audio-control {
+            justify-self: end;
+            margin: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .audio-control:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Gameboy area */
+
+        .gameboy {
+            display: grid;
+            grid-template-columns: 1fr auto;
+        }
+
+        .gameboyFrame img{
+            width: 55%;
+            height: auto;
+            position: absolute;
+            top: 117px;  /* 調整影片位置，讓它放入 Gameboy 屏幕 */
+            left: 332px; /* 可根據需要微調 */
+        }
+
+        .gameboyScreen video {
+            position: absolute;
+            top: 199px;  /* 調整影片位置，讓它放入 Gameboy 屏幕 */
+            left: 566px; /* 可根據需要微調 */
+            width: 352px;
+            height: 250px;
+            object-fit: cover; /*讓影片填滿gameboy框*/
+        }
+
+
+        .button-a{
+            width: 64px;
+            height: 64px;
+            position: absolute;
+            top:  294px;   /* 距離頂部 50px */
+            left: 1035px; /* 距離左側 100px */
+            cursor: pointer;
+        }
+
+        .button-a:active {
+            transform: translateY(4px); /* 模擬按下的效果 */
+            cursor: pointer;
+        }
+
+        @media screen and (max-width: 800px) {
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <div class="title">
+        <p>Zest</p>
+    </div>
+    <!-- 背景音樂開關 -->
+    <div class="audio-control" onclick="toggleAudio()">
+        <img src="/material/music-on.png" alt="">
+    </div>
+</div>
+
+<!-- Gameboy 框架 -->
+<div class="gameboy">
+    <div class="gameboyFrame">
+        <img src="/material/gameboyframe.png" alt="">
+    </div>
+    <div class="gameboyScreen">
+        <!-- gameboy video -->
+        <video src="/material/test.mp4" autoplay loop muted></video>
+        <a href="loginpage.html">
+            <img src="/material/button-a.png" alt="" class="button-a" >
+        </a>
+    </div>
+</div>
+
+<!-- 背景音樂 -->
+<audio id="background-audio" autoplay loop>
+    <source src="music/homepage.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+    // 背景音樂控制
+    const audio = document.getElementById('background-audio');
+    const control = document.querySelector('.audio-control');
+
+    // 預設音樂播放
+    document.addEventListener('DOMContentLoaded', () => {
+        audio.play().catch(err => {
+            console.log('Autoplay blocked:', err);
+        });
+    });
+
+    function toggleAudio() {
+        if (audio.paused) {
+            audio.play();
+            control.innerHTML = '<img src="/material/music-on.png" alt="Music On" width="30">';
+        } else {
+            audio.pause();
+            control.innerHTML = '<img src="/material/music-off.png" alt="Music On" width="30">';
+        }
+    }
+
+</script>
+</body>
+</html>

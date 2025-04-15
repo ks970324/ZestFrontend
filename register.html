@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Zest !</title>
+    <style>
+        /* 設定整個頁面的背景 */
+        body {
+            font-family: "Press Start 2P", sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* 讓 body 佔滿整個視窗 */
+            /* display: flex;
+            justify-content: center;
+            align-items: center; */
+            background-image: url('material/scrollbackground.png'); /* 換成你的背景圖片 */
+            background-size: 950px 805px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: scroll; /* 背景固定 */
+            background-color: #F3E3C9;
+            /* scroll-box 置中 */
+            display: grid;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 滑動區塊內容 */
+        .scroll-box {
+            width: 505px;
+            height: 500px; /* 固定高度，讓它能滾動 */
+            color: #845736;
+            overflow: auto; /* 讓內容區域內部滾動 */
+            display: grid;
+
+        }
+
+        /* 讓內部文字比較長，測試滾動 */
+        .scroll-box p {
+            line-height: 10;
+        }
+
+        .title {
+            text-align: center; /* 讓文字水平置中 */
+            margin-top: 5%;
+            margin-bottom: 5%;
+        }
+
+        .scroll-box title{
+            display: flex;
+            flex-direction: column; /* 垂直排列 */
+            gap: 20px;
+        }
+
+
+        .greeting_1{
+            font-size: 26px;
+            white-space: nowrap; /* 防止文字自動換行 */
+        }
+
+        .greeting_2,  .greeting_3{
+            font-size: 14px;
+        }
+
+
+        .userinfo{
+            text-align: left; /* 文字靠左 */
+            margin-bottom: 5%;
+        }
+
+        .userinfo input{
+            background: transparent;  /* 背景透明 */
+            font-family: "Press Start 2P", sans-serif;
+            border: none;  /* 移除預設邊框 */
+            border-bottom: 2px solid #845736; /* 加上底線 */
+            outline: none; /* 移除點擊時的藍色外框 */
+            color: rgba(132, 87, 54, 0.9);  /* 文字顏色 */
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .character_title{
+            font-size: 22px;
+            text-align: center; /* 讓文字水平置中 */
+            margin-bottom: 5%;
+        }
+
+
+        .character {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            width: 100%; /* 讓 .character 佔滿父容器 */
+            margin-bottom: 15%;
+        }
+
+        .character_choose {
+            display: grid;
+            grid-template-rows: repeat(3, 1fr); /* 3 個等高的區塊 */
+            row-gap: 10%;
+            margin-left: 5%;
+
+        }
+
+        .character_gender, .character_cloth, .character_hair {
+            display: grid;
+            grid-template-rows: 1fr 1fr; /* 第一行 (橫幅) 高度自適應，第二行填滿 */
+            height: 80px;
+        }
+
+        .character_icon_gender {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            cursor: pointer;
+
+        }
+
+        .character_icon_gender img {
+            width: 40px;
+
+        }
+
+        .character_icon_girl {
+            margin-left: -60%;
+        }
+
+        .character_color_hair, .character_color_cloth {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            width: 80%;
+            cursor: pointer;
+        }
+
+        .character_color_hair img, .character_color_cloth img{
+            width: 30%;
+        }
+
+        .character_hair_orange img {
+           margin-left: -50%;
+        }
+
+        .character_hair_brown img {
+            margin-left: -100%;
+        }
+
+        .character_cloth_darkgreen img {
+            margin-left: -50%;
+        }
+
+        .character_cloth_gray img {
+            margin-left: -100%;
+        }
+
+
+
+        .character_img{
+            display: grid;
+            place-items: center;
+            width: 100%;
+            margin-left: -40%;
+            margin-top: 10%;
+        }
+
+        .character_img img{
+            width: 90%;
+        }
+
+        .submit {
+            display: grid;
+            row-gap: 10%;
+            justify-items: center;
+        }
+
+        .submit_sign {
+            border-bottom: 2px solid #845736;
+            touch-action: none; /* 防止觸控時滾動 */
+            width: 90%;
+            cursor: url("/material/pen.png") 20 60, auto;
+            margin-bottom: 5%;
+        }
+
+        .submit_button {
+            font-family: "Press Start 2P", sans-serif;
+            background-color: transparent;
+            border: none;
+            color: #845736;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .submit_button:active {
+            transform: translateY(3px); /* 點擊時向下移動 3px */
+        }
+
+
+
+
+        /* 隱藏滾動條（預設透明） */
+        .scroll-box::-webkit-scrollbar { /*滾動軸軸體*/
+            width: 10px;
+
+        }
+
+        .scroll-box::-webkit-scrollbar-thumb {
+            background: transparent;
+            opacity: 0; /* 預設隱藏 */
+            transition: opacity 0.3s ease-in-out; /* 過渡效果 */
+        }
+        .scroll-box::-webkit-scrollbar-track {
+            background: transparent; /* 軌道透明 */
+        }
+
+        /* 當滾動時，顯示滾動條 */
+        .scroll-box:hover::-webkit-scrollbar-thumb,
+        .scroll-box:focus::-webkit-scrollbar-thumb {
+            background: url('material/scroll.png') no-repeat center;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="scroll-box">
+    <div class="title">
+    <span class = "greeting_1">Welcome adventure! </span>
+    <span class = "greeting_2">Before you start your journey,</span>
+    <span class = "greeting_3">Please help us complete the required information.</span>
+    </div>
+    <div class="userinfo">
+        <label for="email">Email</label>
+        <br>
+        <input type="text" id="email" required placeholder="">
+        <br>
+        <label for="password">Password</label>
+        <br>
+        <input type="text" id="password" required placeholder="">
+        <br>
+        <label for="confirm_password">Password Confirm</label>
+        <br>
+        <input type="text" id="confirm_password" required placeholder="">
+    </div>
+    <div class="character_title">
+        <span>Choose your Character</span>
+    </div>
+
+    <div class="character">
+        <div class="character_choose">
+            <!-- Gender -->
+            <div class="character_gender">
+                <div class="character_text_gender">
+                    Gender
+                </div>
+                <div class="character_icon_gender">
+                    <div class="character_icon_boy gender-icon">
+                        <img src="material/gender-b.png" alt="boy" data-gender="boy">
+                    </div>
+                    <div class="character_icon_girl gender-icon">
+                        <img src="material/gender-g.png" alt="girl" data-gender="girl">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hair -->
+
+            <div class="character_hair">
+                <div class="character_text_hair">
+                    Hair Color
+                </div>
+                <div class="character_color_hair">
+                    <div class="character_hair_black hair-color ">
+                        <img src="material/blackcolor.png" alt="black" data-hair="black">
+                    </div>
+                    <div class="character_hair_orange hair-color ">
+                        <img src="material/orangecolor.png" alt="orange" data-hair="orange">
+                    </div>
+                    <div class="character_hair_brown hair-color ">
+                        <img src="material/browncolor.png" alt="brown" data-hair="brown">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cloth -->
+
+            <div class="character_cloth">
+                <div class="character_text_cloth">
+                    Clothes Color
+                </div>
+                <div class="character_color_cloth">
+                    <div class="character_cloth_blue clothes-color">
+                        <img src="material/bluecolor.png" alt="blue" data-clothes="blue">
+                    </div>
+                    <div class="character_cloth_darkgreen clothes-color">
+                        <img src="material/darkgreencolor.png" alt="darkgreen" data-clothes="darkgreen">
+                    </div>
+                    <div class="character_cloth_gray clothes-color">
+                        <img src="material/graycolor.png" alt="gray" data-clothes="gray">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="character_img">
+            <img src="/material/boy_brown_blue.png" alt="character" id="characterImg">
+        </div>
+    </div>
+
+    <!-- Sign -->
+    <div class="submit">
+        <div>
+            Please sign your name
+        </div>
+        <div class="submit_sign">
+            <canvas id="signatureCanvas" width="400px" height="100px"></canvas>
+        </div>
+        <div class="button">
+            <button class="submit_button">Submit</button>
+        </div>
+    </div>
+</div>
+<script>
+    // sign scope
+    const canvas = document.getElementById("signatureCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let isDrawing = false;
+
+    // 設定繪圖屬性
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "rgba(132, 87, 54, 0.9)";
+
+
+
+    // 滑鼠點下開始繪圖
+    canvas.addEventListener("mousedown", (e) => {
+        isDrawing = true;
+        ctx.beginPath();
+        ctx.moveTo(e.offsetX, e.offsetY);
+    });
+
+    // 滑鼠移動時繪圖
+    canvas.addEventListener("mousemove", (e) => {
+        if (isDrawing) {
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+        }
+    });
+
+    // 滑鼠放開停止繪圖
+    canvas.addEventListener("mouseup", () => {
+        isDrawing = false;
+        ctx.closePath();
+    });
+
+    // 手機觸控事件 (適用於手機或平板)
+    canvas.addEventListener("touchstart", (e) => {
+        const touch = e.touches[0];
+        isDrawing = true;
+        ctx.beginPath();
+        ctx.moveTo(touch.clientX - canvas.offsetLeft, touch.clientY - canvas.offsetTop);
+        e.preventDefault();
+    });
+
+    canvas.addEventListener("touchmove", (e) => {
+        if (isDrawing) {
+            const touch = e.touches[0];
+            ctx.lineTo(touch.clientX - canvas.offsetLeft, touch.clientY - canvas.offsetTop);
+            ctx.stroke();
+        }
+        e.preventDefault();
+    });
+
+    canvas.addEventListener("touchend", () => {
+        isDrawing = false;
+        ctx.closePath();
+    });
+
+    // 設定 Canvas 內點擊不會清除
+    canvas.addEventListener("click", (event) => {
+        event.stopPropagation(); // 阻止點擊事件冒泡
+    });
+
+    // 監聽整個文件的點擊事件 點擊 Canvas 外部則清除
+    document.addEventListener("click", (event) => {
+        if ( !(canvas.contains(event.target)) && !event.target.classList.contains("submit_button")) { // 如果點擊的不是 Canvas
+            clearCanvas(); // 執行清除函式
+        }
+    });
+
+    // 清除畫布
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // change image
+
+    // 儲存目前選擇的狀態
+    let characterState = {
+        gender: "boy",  // 預設性別
+        hair: "brown",   // 預設頭髮顏色
+        clothes: "blue"  // 預設衣服顏色
+    };
+
+    // 更新角色圖片
+    function updateCharacter() {
+        let { gender, hair, clothes } = characterState;
+        document.getElementById("characterImg").src = `/material/${gender}_${hair}_${clothes}.png`; // 依選擇組合圖片
+    }
+
+    // 監聽性別按鈕
+    document.querySelectorAll(".gender-icon img").forEach(icon => {
+        icon.addEventListener("click", function() {
+            characterState.gender = this.getAttribute("data-gender"); // 設定性別
+            updateCharacter(); // 更新圖片
+        });
+    });
+
+    // 監聽頭髮顏色按鈕
+    document.querySelectorAll(".hair-color img").forEach(icon => {
+        icon.addEventListener("click", function() {
+            characterState.hair = this.getAttribute("data-hair"); // 設定頭髮顏色
+            updateCharacter(); // 更新圖片
+        });
+    });
+
+    // 監聽衣服顏色按鈕
+    document.querySelectorAll(".clothes-color img").forEach(icon => {
+        icon.addEventListener("click", function() {
+            characterState.clothes = this.getAttribute("data-clothes"); // 設定衣服顏色
+            updateCharacter(); // 更新圖片
+        });
+    });
+
+
+</script>
+
+</body>
+</html>

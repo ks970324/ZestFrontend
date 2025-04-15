@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>固定背景 + 內容區域滾動</title>
+
+    <style>
+             /* 全螢幕黑色遮罩 */
+         #transitionOverlay {
+             position: fixed;
+             top: 0;
+             left: 0;
+             width: 100vw;
+             height: 100vh;
+             background: black;
+             clip-path: circle(0% at center); /* 初始為 0%，完全透明 */
+             transition: clip-path 0.8s ease-in-out; /* 圓形擴展動畫 */
+             z-index: 9999; /* 確保在最上層 */
+             pointer-events: none; /* 讓它不影響點擊 */
+         }
+    </style>
+
+
+    </head>
+    <body>
+    <a href="https://example.com" id="transitionButton">
+        <img src="button.png" alt="點我" width="100">
+    </a>
+
+    <!-- 遮罩層 -->
+    <div id="transitionOverlay"></div>
+    <a href="https://example.com" id="coolButton">
+        <img src="button.png" alt="點我" width="100">
+    </a>
+    <script>
+        document.getElementById("transitionButton").addEventListener("click", function(event) {
+            event.preventDefault(); // 防止立即跳轉
+
+            // 啟動圓形擴展動畫
+            let overlay = document.getElementById("transitionOverlay");
+            overlay.style.clip-path = "circle(150% at center)"; // 擴展到整個畫面
+
+            // 等待動畫結束後才跳轉
+            setTimeout(() => {
+                window.location.href = this.href;
+            }, 800); // 0.8 秒後跳轉
+        });
+    </script>
+
+    </body>
+</html>

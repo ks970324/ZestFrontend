@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zest Login page</title>
+    <link rel="icon" href="/material/games.png">
+    <style>
+        body {
+            margin:0;
+            font-family: "Press Start 2P", sans-serif;
+            background: url('/material/loginbackground.png') no-repeat center center fixed;
+            background-size: cover; /*填滿整個區域與等比例縮放*/
+        }
+
+        .title h1{
+            font-size: 46px;
+            text-align: center; /* 置中*/
+            white-space: nowrap; /* 防止文字自動換行 */
+            margin: 100px; /*與下面form的距離*/
+
+        }
+
+        .login-form {
+            text-align: center;
+        }
+
+        .login-form input {
+            width: 40%;
+            padding: 10px;
+            font-family: "Press Start 2P", sans-serif;
+            font-size: 20px; /* 文字大小 */
+            text-align: center;
+            display: block; /*input換行排列*/
+            border-radius: 1px; /* 圓角效果 */
+            background-color: rgba(255, 255, 255, 0.5); /* 半透明背景 */
+            border: none; /* 移除邊框 */
+            margin: 20px auto; /*input間的寬度*/
+
+        }
+
+        .remember {
+            display: inline-flex; /* 使用 flex 來排列 checkbox 和文字 */
+            align-items: center;  /* 使 checkbox 和文字垂直置中 */
+            gap: 15px; /* 調整 checkbox 和文字之間的間距 */
+            white-space: nowrap; /* 防止文字自動換行 */
+        }
+
+        .remember input[type="checkbox"] {
+            width: 20px; /* 調整寬度 */
+            height: 20px; /* 調整高度 */
+            margin: 10px; /* 移除外邊距 */
+        }
+
+        /* 輸入框聚焦時的效果 */
+        .login-form input:focus {
+            border: 3px solid #ffffff;
+            outline: none; /* 保證焦點時不會有額外的邊框 */
+        }
+
+        .login-form input:valid {
+            border-color: #ffce3c; /* 正確輸入時邊框變色 */
+        }
+
+        .forget a{
+            margin: 25px;
+            display: inline-flex;
+            align-items: center; /* 保證圖片和文字垂直對齊 */
+            cursor: pointer;
+            color: #000000;
+            gap: 8px; /* 控制 icon 與文字間距 */
+            text-decoration: none; /* 移除底線 */
+        }
+
+        .forget a::before {
+            content: url('/material/question.png'); /*  icon 路徑 */
+            transform: translateY(-40%);
+            width: 25px; /* icon 大小 */
+            height: 25px;
+            opacity: 0; /* 預設隱藏 */
+            transition: opacity 0.3s ease-in-out;
+            margin-right: 8px; /* 調整這個值來改變 icon 和文字之間的距離 */
+        }
+
+        .forget a:hover::before {
+            opacity: 1;
+        }
+
+
+        .login-text button{
+            display: inline-flex;
+            margin: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #000000;
+            align-items: center; /* 垂直對齊 */
+            gap: 8px; /* 控制 icon 與文字間距 */
+            transition: all 0.3s;
+            font-family: 'Press Start 2P', sans-serif;
+            border: none;
+            background: none;
+        }
+
+        .login-text button::before {
+            content: url('/material/play1.png'); /* 替換為你的 icon 路徑 */
+            margin-top: 5px; /* 向下移動 */
+            width: 20px; /* icon 大小 */
+            height: 20px;
+            transition: opacity 0.3s ease-in-out; /*轉場效果持續0.3s，開始結束都慢中間加快，效果較平滑*/
+            margin-right: 15px; /* 調整這個值來改變 icon 和文字之間的距離 */
+            transform: translateY(-50%);
+        }
+
+        .login-text button:hover::before {
+            content: url('/material/play.png'); /* 替換成新 icon */
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="title">
+    <h1>Start your adventure!</h1>
+</div>
+<div class="login-form">
+    <form id="loginForm">
+        <input type="text" id="email" required placeholder="email">
+        <input type="password" id="password" required placeholder="password">
+        <label for="remember" class="remember">
+        <input type="checkbox" id="remember" name="remember">Remember me
+        </label>
+        <div class="forget">
+            <a href="/forget.html">Forget your password
+<!--                <img src="/material/question.png" alt="question" class="forget-icon">-->
+            </a>
+        </div>
+
+        <div class="login-text">
+            <button type="submit">Go!</button>
+            <a href="/register.html">
+                <button>Join us!</button>
+            </a>
+        </div>
+        <p id="error-message" style="color: red;"></p>
+    </form>
+</div>
+<script>
+    document.getElementById("loginForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        const response = await fetch("http://localhost:5070/ZestLogin/Login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+        alert(result ? "登入成功！" : "帳號或密碼錯誤");
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zest - find your password</title>
+    <link rel="icon" href="material/question.png">
+    <style>
+        body {
+            margin:0;
+            font-family: "Press Start 2P", sans-serif;
+            background: url('material/loginbackground.png') no-repeat center center fixed;
+            background-size: cover; /*填滿整個區域與等比例縮放*/
+            overflow: hidden;
+        }
+
+        .forget-frame{
+            position: relative; /* 讓內部元素能用 absolute 定位 */
+            display: flex;
+            justify-content: center; /* 讓圖片水平置中 */
+            align-items: center; /* 讓圖片垂直置中 */
+        }
+
+        .text-us{
+            width: 440px;
+            position: absolute;
+            top: 175px; /* 調整文字的垂直位置 */
+            left: 675px; /* 調整文字的水平位置 */
+            transform: translate(-50%, -50%); /* 讓文字真正置中 */
+            color: black; /* 文字顏色 */
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .forget-frame input{
+            font-family: "Press Start 2P", sans-serif;
+            position: absolute;
+            top: 330px; /* 調整文字的垂直位置 */
+            left: 581px; /* 調整文字的水平位置 */
+            width: 427px;
+            height: 125px;
+            background: transparent; /* 背景透明 */
+            font-size: 18px;
+            border: none;
+            outline: none; /* 移除點擊時的藍色外框 */
+        }
+
+        .forget-frame input:-webkit-autofill,
+        .forget-frame input:-webkit-autofill:focus,
+        .forget-frame input:-webkit-autofill:hover{ /*自動填入框用此語法*/
+            background: transparent !important; /* 背景透明 */
+        }
+
+
+        .forget-frame button{
+            border: none;
+            background: none;
+            padding: 0;
+            width: 40px;
+            position: absolute;
+            top: 475px; /* 調整文字的垂直位置 */
+            left: 870px; /* 調整文字的水平位置 */
+            cursor: pointer;
+        }
+
+        .forget-frame button:active{
+            transform: translateY(4px); /* 模擬按下的效果 */
+            cursor: pointer;
+            box-shadow: 40px 3px 60px rgba(0, 0, 0, 0.2); /* 初始陰影 */
+        }
+    </style>
+</head>
+<body>
+<div class="forget-frame">
+    <img src="material/forgetframe.png" alt="forget frame">
+    <div class="text-us">
+    <span>Dear adventure!</span>
+    <br>
+    <br>
+    <span>Please provide your email,and we will resend the password to you. </span>
+    </div>
+    <div class="input">
+        <form action="sendemail" method="post">
+        <label for="email"></label>
+        <input type="text" required placeholder="Email address" id="email">
+        <button type="submit">
+            <img src="material/enter.png" alt="enter">
+        </button>
+            </form>
+    </div>
+</div>
+</body>
+</html>
