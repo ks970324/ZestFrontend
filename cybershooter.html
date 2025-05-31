@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Shooter</title>
+    <style>
+        * {
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            background-color: #1e1e1e;
+            font-family: "Press Start 2P", sans-serif;
+            flex-direction: column;
+
+        }
+
+        .header {
+            display: flex;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            width:100%;
+            padding:10px;
+            justify-content: space-between; /* 左右排列 */
+        }
+
+        .question, .exit{
+            cursor: pointer;
+        }
+        .exit img{
+            height:35px;
+        }
+
+        .title {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .healthBar {
+            color: white;
+            margin-bottom: 20px;
+            display: flex;
+        }
+
+        .playergroup {
+            display: flex;
+            align-items: center;
+        }
+
+        .blueplayer-label, .redplayer-label {
+            width: 150px;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .blueplayer-health, .redplayer-health {
+            display: flex;
+            align-items: center;
+            width: 180px;
+        }
+
+        .blueplayer-health {
+            margin-right: 20px;
+        }
+
+        .battlefield {
+            display: flex;
+            justify-content: space-between; /* 左右分開 */
+            gap: 20px;
+            position: relative; /* 內部的角色可以根據此定位 */
+            margin-bottom: 50px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 125px);  /* 每行 3 個格子 */
+            grid-template-rows: repeat(3, 125px);     /* 每列 3 個格子 */
+            z-index:1 ;
+        }
+
+        .grid-item {
+            width: 125px;
+            height: 125px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 2px solid #ddd;
+
+        }
+
+        .blue {
+            background-color: #007bff;
+        }
+
+        .red {
+            background-color: #dc3545;
+        }
+
+        .player, .computer{
+            position: absolute;
+            width: 25%;
+            height: 25%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+        }
+
+        .player {
+            background-image: url('/material/girl_black_blue.png');
+            z-index: 2;
+
+        }
+
+        .computer {
+            background-image: url("/material/robot.png") ;
+            z-index: 2;
+
+
+        }
+
+        .buttons {
+            display: flex;
+        }
+
+        .buttons button {
+            font-family: "Press Start 2P", sans-serif;
+            font-size: 16px;
+            padding: 10px;
+            background-color: #ffce3c;
+            cursor: pointer;
+            border: white 3px solid;
+            transition: top 0.1s ease;
+            position: relative;
+
+        }
+
+        .buttons button:hover {
+            background-color: #ff9600;
+        }
+
+        .buttons button:active {
+            top: 3px; /* 向下移動 3px */
+        }
+
+        #MoveButton, #AttackButton {
+            display: none;
+        }
+
+        .bullet {
+            display: none; /* 一開始就隱藏 */
+            position: absolute;
+            pointer-events: none; /* 不讓它擋住滑鼠事件 */
+            z-index: 2;
+            padding: 20px;
+        }
+
+        .modal {
+            display: none; /* 預設隱藏 */
+            position: fixed; /* 固定在視窗 */
+            z-index: 1000; /* 在最上層 */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .modal-content {
+            text-align: center;
+            background-color: #ffffff;
+            margin: 15% auto; /* 垂直間距＋置中 */
+            padding: 60px;
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .modal-text {
+            color: #000000;
+            font-size: 28px;
+            margin-bottom: 40px;
+        }
+
+        .closeBtn {
+            font-size: 18px;
+            cursor: pointer;
+            color: #000000;
+            background-color: #ffce3c;
+            padding: 10px;
+        }
+
+        .closeBtn:hover {
+            background-color: #ff9600;
+        }
+
+        .direction {
+            display: none; /* 預設隱藏 */
+            position: fixed; /* 固定在視窗 */
+            z-index: 1000; /* 在最上層 */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+
+        }
+
+        .direction-content {
+            text-align: center;
+            background-color: #000000;
+            margin: 10% auto; /* 垂直間距＋置中 */
+            width: 900px;
+            height: auto;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: #ffce3c 5px dashed;
+        }
+
+        .direction-text h1 {
+            color: #ffce3c;
+            margin-top:-20px;
+            margin-bottom: 30px;
+
+        }
+
+        .direction-text p , .direction-text ul{
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .direction-text {
+            margin-bottom: 50px;
+            color:white;
+        }
+
+        .startBtn {
+            font-size: 18px;
+            cursor: pointer;
+            color: #000000;
+            background-color: #ffce3c;
+            padding: 10px;
+        }
+
+        .startBtn:hover {
+            background-color: #ff9600;
+        }
+
+        @keyframes hit {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .hit {
+            animation: hit 0.2s linear 3; /* 每次 0.2 秒，閃爍 3 次 */
+        }
+
+
+    </style>
+
+</head>
+<body>
+<div class="header">
+    <div class="exit">
+        <a href="gamelobby.html"><img src="material/door.png"></a>
+    </div>
+    <div class="question" onclick="startDirection();"><img src="material/question-white.png"></div>
+</div>
+<div class="title"><h1>Cyber Shooter</h1></div>
+<div class="healthBar" id="healthBar">
+    <div class="playergroup">
+        <div class="blueplayer-label">Player</div>
+        <div class="blueplayer-health" id="blueplayer-health"></div>
+    </div>
+    <div class="playergroup">
+        <div class="redplayer-label">Computer</div>
+        <div class="redplayer-health" id="redplayer-health"></div>
+    </div>
+</div>
+<div class="battlefield" id="battlefield">
+    <!-- 藍色九宮格 -->
+    <div class="grid-container" id="blue-grid">
+        <div class="grid-item blue"></div>
+        <div class="grid-item blue"></div>
+        <div class="grid-item blue"></div>
+        <div class="grid-item blue"></div>
+        <div class="grid-item blue"></div>
+        <div class="grid-item blue"></div>
+        <div class="grid-item blue"></div>
+        <div class="grid-item blue"></div>
+        <div class="grid-item blue"></div>
+    </div>
+
+    <!-- 紅色九宮格 -->
+    <div class="grid-container" id="red-grid">
+        <div class="grid-item red"></div>
+        <div class="grid-item red"></div>
+        <div class="grid-item red"></div>
+        <div class="grid-item red"></div>
+        <div class="grid-item red"></div>
+        <div class="grid-item red"></div>
+        <div class="grid-item red"></div>
+        <div class="grid-item red"></div>
+        <div class="grid-item red"></div>
+    </div>
+    <div class="player" id="bluePlayer"></div>
+    <div class="computer" id="redPlayer"></div>
+    <div class="bullet" id="bullet">
+        <img src="material/bullet.png" alt="bullet">
+    </div>
+</div>
+<div class="buttons">
+    <div class="AttackButton" id="AttackButton">
+        <button onclick="PlayerAttack(); UpdateButton();">Attack</button>
+    </div>
+    <div class="MoveButton" id="MoveButton">
+        <button onclick="AIAttack();UpdateButton();">Finish Move</button>
+    </div>
+</div>
+<div class="modal" id="modal">
+    <div class="modal-content" id="modal-content">
+        <div class="modal-text" id="modal-text"></div>
+        <span class="closeBtn" id="closeBtn" onclick="Reset();">Restart Game</span>
+    </div>
+</div>
+<div class="direction" id="direction">
+    <div class="direction-content" id="direction-content">
+        <div class="direction-text" id="direction-text">
+            <p><h1>Game rule</h1></p>
+            <p>1. Use the arrow keys to move your character.</p>
+            <p>2. Press the Enter key to perform actions (ending movement or attacking).</p>
+            <p>3. Each player has five hearts of health. Reduce your opponent's hearts to zero to win.</p>
+            <p>4. Damage rules for attacks:</p>
+            <ul style="text-align: left;">
+                <li>If the distance between players is 0–1 tile: deduct 1.5 hearts.</li>
+                <li>If the distance is 2 tiles: deduct 1 heart.</li>
+                <li>If the distance is 3–4 tiles: deduct 0.5 heart.</li>
+            </ul>
+        </div>
+        <span class="startBtn" id="startBtn">Game Start</span>
+    </div>
+</div>
+<script>
+
+    function startDirection () {
+        document.getElementById("direction").style.display = "block";
+    }
+
+    startDirection();
+
+    startBtn.onclick = function () {
+        document.getElementById("direction").style.display = "none";
+    };
+
+
+
+    // 設定回合
+
+    const CurrentStatus = {
+        null: 0,
+        bluePlayer: 1,
+        redPlayer: 2
+    };
+
+    let currentTurn; // 定義一個變數來儲存當前回合
+
+    // set character original position
+
+    const cellSize = 125;
+    const redOffset = 3 * cellSize + 20;
+    const initialPositions = {
+        bluePlayer: { x: 1, y: 1 },
+        redPlayer: { x: 4, y: 1 }
+    };
+
+    let blueplayerIndex =  { x: 1, y: 1 };
+    let redplayerIndex = { x: 4, y: 1 };
+
+    // set initial position and first round
+
+    window.onload = function FirstRound() {
+        setPosition(initialPositions)
+    }
+    function setPosition(data) {
+        const player = document.getElementById('bluePlayer');
+        const computer = document.getElementById('redPlayer');
+
+        // 藍色角色初始位置
+        player.style.left = `${data.bluePlayer.x * cellSize}px`;
+        player.style.top = `${data.bluePlayer.y * cellSize}px`;
+
+        // 紅色角色初始位置
+        const redX = (data.redPlayer.x - 3) * cellSize;
+        computer.style.left = `${redX + redOffset}px`; // 紅色角色偏移量
+        computer.style.top = `${data.redPlayer.y * cellSize}px`;
+    }
+
+    // update position
+
+    function updatePosition(data) {
+        const player = document.getElementById('bluePlayer');
+        const computer = document.getElementById('redPlayer');
+
+        player.style.left = `${data.bluePlayer.x * cellSize}px`;
+        player.style.top = `${data.bluePlayer.y * cellSize}px`;
+
+        const redX = (data.redPlayer.x - 3) * cellSize;
+        computer.style.left = `${redX + redOffset}px`;
+        computer.style.top = `${data.redPlayer.y * cellSize}px`;
+
+        blueplayerIndex = {
+            x: data.bluePlayer.x,
+            y: data.bluePlayer.y
+        };
+        redplayerIndex = {
+            x: data.redPlayer.x,
+            y: data.redPlayer.y
+        };
+
+
+    }
+
+
+
+    // when player attack then show attack button
+
+    async function UpdateButton() {
+        try {
+            const response = await fetch("http://localhost:5070/ZestGame/round", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new error("Service got error")
+            }
+
+            const data = await response.json();
+
+            const attackBtn = document.getElementById('AttackButton');
+            const MoveBtn = document.getElementById('MoveButton');
+
+            if (data.currentStatus === "blueplayer") {
+                attackBtn.style.display = "block";
+            } else {
+                attackBtn.style.display = "none";
+            }
+
+            if (data.currentStatus === "redplayer") {
+                MoveBtn.style.display = "block";
+            } else {
+                MoveBtn.style.display = "none";
+            }
+
+
+        }catch(error) {
+            console.error("get CurrentStatus error",error);
+        }
+    }
+
+    UpdateButton();
+
+
+    // healthBar
+
+    let blueCurrentHealth = 10;
+    let redCurrentHealth = 10;
+
+
+    function updateHealthBar(health, elementId) {
+
+        const healthbar = document.getElementById(elementId);
+        healthbar.innerHTML = '';
+
+
+        let fullHearts = Math.floor(health / 2);
+        let halfHeart = health % 2 === 1;
+        let emptyHearts = 5 - fullHearts - (halfHeart ? 1 : 0);
+
+        for (let i = 0; i < fullHearts; i++) {
+            healthbar.innerHTML += '<img src="/material/fullheart.png" width="35">';
+        }
+
+        if (halfHeart) {
+            healthbar.innerHTML += '<img src="/material/halfheart.png" width="35">';
+        }
+
+        for (let i = 0; i < emptyHearts; i++) {}
+    }
+
+    updateHealthBar(blueCurrentHealth, 'blueplayer-health');
+    updateHealthBar(redCurrentHealth, 'redplayer-health');
+
+
+    // enter can attack or move
+
+
+    document.addEventListener('keydown', function (event) {
+
+        const attackBtn = document.getElementById('AttackButton');
+        const MoveBtn = document.getElementById('MoveButton');
+        const closeBtn = document.getElementById('closeBtn');
+        const modal = document.getElementById('modal');
+        const direction = document.getElementById('direction');
+
+        if (window.getComputedStyle(direction).display === 'block') {
+            return;
+        }
+
+        if (event.key === 'Enter') {
+            if (window.getComputedStyle(modal).display === 'block') {
+                Reset();
+                return;
+            }
+
+
+            if (attackBtn.style.display === 'block') {
+                PlayerAttack();
+                UpdateButton();
+                return;
+            }
+
+            if (MoveBtn.style.display === 'block') {
+                AIAttack();
+                UpdateButton();
+                return;
+            }
+        }
+    });
+
+
+
+
+
+
+    // 綁定鍵盤按下事件
+    document.addEventListener('keydown', function (event) {
+
+    const directionText = document.getElementById('direction');
+    if (window.getComputedStyle(directionText).display === 'block') {
+            return;
+        }
+    let direction = null;
+
+    switch (event.key) {
+    case 'ArrowUp':
+    direction = 'up';
+    break;
+    case 'ArrowDown':
+    direction = 'down';
+    break;
+    case 'ArrowLeft':
+    direction = 'left';
+    break;
+    case 'ArrowRight':
+    direction = 'right';
+    break;
+}
+
+    if (direction) {
+    // 送出移動請求到後端
+    fetch('http://localhost:5070/ZestGame/move', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json'
+},
+    body: JSON.stringify({
+    color: 'blue',
+    direction: direction
+})
+})
+    .then(res => res.json())
+    .then(data => {
+    console.log('後端回傳：', data);
+    updatePosition(data);
+})
+    .catch(err => {
+    console.error('移動時出錯：', err);
+});
+}
+});
+
+    // 攻擊
+
+    const modal = document.getElementById('modal');
+    const modalText = document.getElementById('modal-text');
+    const player = document.getElementById('bluePlayer');
+    const computer = document.getElementById('redPlayer');
+
+
+    function PlayerAttack() {
+        fetch('http://localhost:5070/ZestGame/attack', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                Attacker: blueplayerIndex,
+                Target: redplayerIndex
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                updatePosition(data)
+                animateBullet(data.bluePlayer, data.bulletEnd, data.isHit);
+                updateHealthBar(data.redCurrentHealth,'redplayer-health');
+                updateHealthBar(data.blueCurrentHealth, 'blueplayer-health');
+                attackEffect(computer, data.isHit);
+                return data;
+            })
+            .then(data => {
+                if (data.gameResult === "blue") {
+                    modalText.textContent = "You Win !";
+                    modal.style.display = "block";
+                }
+            })
+    }
+
+    function AIAttack() {
+        fetch('http://localhost:5070/ZestGame/AIattack', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                Attacker: redplayerIndex,
+                Target: blueplayerIndex
+            })
+        })
+            .then(res => res.json())
+            .then( data => {
+                updatePosition(data);
+                animateBullet(data.redPlayer, data.bulletEnd, data.isHit);
+                updateHealthBar(data.redCurrentHealth,'redplayer-health');
+                updateHealthBar(data.blueCurrentHealth, 'blueplayer-health');
+                attackEffect(player, data.isHit);
+                return data;
+            })
+            .then( data => {
+                if (data.gameResult === "red") {
+                    modalText.textContent = "You Lose !";
+                    modal.style.display = "block";
+                }
+            })
+
+    }
+
+
+
+    function Reset() {
+        modal.style.display = "none";
+        fetch('http://localhost:5070/ZestGame/reset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(() => {
+                window.location.reload();
+            })
+    }
+
+    function attackEffect(character, isHit) {
+        if (isHit) {
+            character.classList.add('hit');
+
+            setTimeout(() => {
+                character.classList.remove('hit');
+            }, 600);
+        }
+
+    }
+
+
+
+
+    function animateBullet(startPos, endPos, isHit) {
+        const bullet = document.getElementById('bullet');
+
+
+        // 計算起點位置
+        const startX = startPos.x * cellSize;
+        const startY = startPos.y * cellSize;
+
+        // 計算終點位置（需要判斷是打向哪一方）
+        const endX = endPos.x * cellSize;
+        const endY = endPos.y * cellSize;
+
+        // 如果是紅方格子，加入紅方偏移
+        const isTargetRed = endPos.x >= 3;
+        const actualEndX = isTargetRed ? endX + 20 : endX; // 如果打向紅方，就加上紅方偏移
+
+        // 設定子彈初始位置
+        bullet.style.transition = 'none';
+        bullet.style.left = `${startX}px`;
+        bullet.style.top = `${startY}px`;
+        bullet.style.display = 'block';
+
+        // 啟動動畫
+        setTimeout(() => {
+            bullet.style.transition = 'all 0.4s ease-in';
+            bullet.style.left = `${actualEndX}px`;
+            bullet.style.top = `${endY}px`;
+        }, 50);
+
+        // 動畫結束後關掉子彈
+        setTimeout(() => {
+            bullet.style.display = 'none';
+        }, 600);
+    }
+
+
+</script>
+</body>
+</html>

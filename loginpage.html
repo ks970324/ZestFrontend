@@ -13,6 +13,21 @@
             background-size: cover; /*填滿整個區域與等比例縮放*/
         }
 
+        .header {
+            width:100%;
+        }
+
+        .home-icon {
+            cursor: pointer;
+            margin-left: 10px;
+            margin-top: 10px;
+        }
+
+        .header img {
+            width:36px;
+            padding: 3px;
+        }
+
         .title h1{
             font-size: 46px;
             text-align: center; /* 置中*/
@@ -115,10 +130,21 @@
             content: url('/material/play.png'); /* 替換成新 icon */
         }
 
+        .errormessage {
+            color: red;
+            display: none;
+            margin-bottom: 10px;
+        }
+
+
+
 
     </style>
 </head>
 <body>
+<div class="header">
+    <a href="homepage.html"><img src="material/logo.png" alt="home" class="home-icon"></a>
+</div>
 <div class="title">
     <h1>Start your adventure!</h1>
 </div>
@@ -126,6 +152,7 @@
     <form id="loginForm">
         <input type="text" id="email" required placeholder="email">
         <input type="password" id="password" required placeholder="password">
+        <div id="errormessage" class="errormessage"> *** Wrong password or email ***</div>
         <label for="remember" class="remember">
         <input type="checkbox" id="remember" name="remember">Remember me
         </label>
@@ -141,12 +168,16 @@
                 <button>Join us!</button>
             </a>
         </div>
-        <p id="error-message" style="color: red;"></p>
     </form>
 </div>
 <script>
     document.getElementById("loginForm").addEventListener("submit", async function(event) {
         event.preventDefault();
+
+        const LoginStatus = {
+            Success: 0,
+            Failed: 1
+        };
 
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
@@ -160,7 +191,13 @@
         });
 
         const result = await response.json();
-        alert(result ? "登入成功！" : "帳號或密碼錯誤");
+        const errorMessageDiv = document.getElementById("errormessage");
+
+        if (result.status === LoginStatus.Success) {
+            window.location.href = "gamelobby.html";
+        } else if (result.status === LoginStatus.Failed) {
+            errorMessageDiv.style.display = "block"; // 顯示錯誤訊息
+        }
     });
 </script>
 </body>

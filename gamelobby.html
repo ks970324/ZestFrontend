@@ -1,101 +1,199 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zest game lobby</title>
-<style>
-    .backpack img {
-        position: fixed; /* 固定位置 */
-        top: 10px;
-        right: 20px;
-        width: 60px;
-        height: 60px;
-        z-index: 1000; /* 確保 icon 在最上層 */
-    }
-    ul{
-        list-style-type:none;
-        margin:0;
-        padding:0;
-        overflow:hidden;
-        background-color:#333;
-    }
+    <title>Zest Game lobby</title>
+    <style>
+        body {
+            font-family: "Press Start 2P", sans-serif;
+            background: url("material/gamelobbybackground1.png");
+            background-size: cover;
 
-    li{
-        float:left;
-    }
+        }
+        .header {
+            display: flex;
+            width: 100%;
+        }
 
-    li a, .dropbtn
-    {
-        display:inline-block;
-        color:white;
-        text-align:center;
-        padding:14px 16px;
-        text-decoration:none;
-    }
+        .home-icon img{
+            cursor: pointer;
+            width:36px;
+            margin-left: 5px;
+            margin-top: 5px;
+        }
 
-    li a:hover, .dropdown:hover, .dropbtn
-    {
-        background-color:#111;
-    }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            left:92%;
+        }
 
-    .dropdown
-    {
-        display:inline-block;
-    }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 5%;
+            background-color: #ab9377;
+            border: black solid 3px;
+        }
 
-    .backpack-content
-    {
-        display:none;
-        position:absolute;
-        background-color:#f9f9f9;
-        min-width:160px;
-        box-shadow:0px 8px 16px 0px rgba(0,0,0,0.2);
-    }
+        .dropdown-profile{
+            width: 100%;
+            border-bottom: black solid 3px;
+            box-sizing: border-box;
+            padding: 5px;
+        }
 
-    .backpack-content a
-    {
-        color:black;
-        padding:12px 16px;
-        text-decoration:none;
-        display:block;
-    }
+        .dropdown-music {
+            padding: 5px;
+        }
 
-    .backpack-content a:hover {background-color: #f1f1f1}
 
-    .backpack img:hover .dropdown-content
-    {
-        display:block;
-    }
+        .dropdown-content img {
+            display: block;
+            width: 30px;
+            height:30px;
+            padding: 5px;
+            cursor: pointer;
+        }
 
-</style>
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .game-entry {
+            display: flex;
+        }
+
+        .game-gate img {
+            position: absolute;
+            bottom: 5%;         /* 貼齊底部 */
+            right: 15%;           /* 靠左 */
+            width: 40%;      /* 可根據實際調整 */
+            z-index: 1;
+        }
+
+        .user-character img {
+            position: absolute;
+            bottom: 5%;         /* 貼齊底部 */
+            left: 15%;           /* 靠左 */
+            width: 5%;      /* 可根據實際調整 */
+        }
+
+        .game-card img {
+            position: absolute;
+            width: 21%;
+            right:25%;
+            top:38%;
+        }
+
+        .bird {
+            position: absolute;
+            width: 10%;
+            height: 10%;
+            background-image: url('material/bird.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: flyaway 3s ease-in forwards;
+            z-index: 2;
+        }
+
+        @keyframes flyaway {
+            0% {
+                left: 5%;
+                top: 40%;
+                opacity: 1;
+            }
+            80% {
+                left: 60%;
+                top: 50%;
+                opacity: 1;
+            }
+            100% {
+                left: 60%;
+                top: 50%;
+                opacity: 0;
+            }
+        }
+
+        .game-profile {
+            display: none;
+        }
+
+    </style>
 </head>
 <body>
-<div>
-    <a href="#" class="backpack">
-        <img src="/material/backpack.png">
-    </a>
-    <div class="backpack-content">
-        <a href="#">链接 1</a>
-        <a href="#">链接 2</a>
-        <a href="#">链接 3</a>
+<div class="header">
+    <div class="home-icon">
+        <a href="homepage.html"><img src="material/logo.png" alt="home" class="home-icon"></a>
+    </div>
+    <div class="dropdown">
+        <!-- 主按鈕圖片 -->
+        <img src="material/bag.png" alt="主圖片">
+
+        <!-- 下拉圖片選單 -->
+        <div class="dropdown-content">
+            <div class="dropdown-profile">
+                <a href="https://example.com/1">
+                    <img src="material/profile.png" alt="profile">
+                </a>
+            </div>
+            <div class="dropdown-music">
+                <img src="material/music-on.png" alt="music" onclick="toggleAudio()">
+            </div>
+        </div>
+        <audio id="background-audio" autoplay loop>
+            <source src="music/gamelobby.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
     </div>
 </div>
-<ul>
-    <li><a class="active" href="#home">主页</a></li>
-    <li><a href="#news">新闻</a></li>
-    <div class="dropdown">
-        <a href="#" class="dropbtn">下拉菜单</a>
-        <div class="dropdown-content">
-            <a href="#">链接 1</a>
-            <a href="#">链接 2</a>
-            <a href="#">链接 3</a>
+
+<div class="bird"></div>
+<div class="game-entry">
+    <div class="user-character">
+        <img src="material/boy_black_darkgreen.png" alt="user-character">
+    </div>
+    <div class="game-gate">
+        <img src="material/gamelobbygate.png" alt="game-entry">
+        <div class="game-card">
+            <a href="cybershooter.html">
+                <img src="material/gamecard.png" alt="game-card">
+            </a>
         </div>
     </div>
-</ul>
+</div>
+<div class="game-profile">
+    <div class="profile-content" id="profile-content">
+        <div class="profile-text" id="profile-text"></div>
+        <span class="closeBtn" id="closeBtn" >&times;</span>
+    </div>
+</div>
 
-<h3>导航栏上的下拉菜单</h3>
-<p>鼠标移动到 "下拉菜单" 链接先显示下拉菜单。</p>
+
+<script>
+    // 背景音樂控制
+    const audio = document.getElementById('background-audio');
+    const control = document.querySelector('.audio-control');
+
+    // 預設音樂播放
+    document.addEventListener('DOMContentLoaded', () => {
+        audio.play().catch(err => {
+            console.log('Autoplay blocked:', err);
+        });
+    });
+
+    function toggleAudio() {
+        if (audio.paused) {
+            audio.play();
+            control.innerHTML = '<img src="/material/music-on.png" alt="Music On" width="30">';
+        } else {
+            audio.pause();
+            control.innerHTML = '<img src="/material/music-off.png" alt="Music On" width="30">';
+        }
+    }
+
+</script>
 
 </body>
 </html>

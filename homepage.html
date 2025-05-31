@@ -28,6 +28,7 @@
             transform: translateX(-50%); /* 只水平置中 */
             color: white;
             font-size: 50px;
+            margin-top: -15px;
         }
 
         /* 背景音樂開關按鈕 */
@@ -55,16 +56,17 @@
             width: 55%;
             height: auto;
             position: absolute;
-            top: 117px;  /* 調整影片位置，讓它放入 Gameboy 屏幕 */
+            top: 150px;  /* 調整影片位置，讓它放入 Gameboy 屏幕 */
             left: 332px; /* 可根據需要微調 */
+            z-index: 1000;
         }
 
         .gameboyScreen video {
             position: absolute;
-            top: 199px;  /* 調整影片位置，讓它放入 Gameboy 屏幕 */
-            left: 566px; /* 可根據需要微調 */
-            width: 352px;
-            height: 250px;
+            top: 143px;  /* 調整影片位置，讓它放入 Gameboy 屏幕 */
+            left: 550px; /* 可根據需要微調 */
+            width: 380px;
+            height: 380px;
             object-fit: cover; /*讓影片填滿gameboy框*/
         }
 
@@ -73,9 +75,10 @@
             width: 64px;
             height: 64px;
             position: absolute;
-            top:  294px;   /* 距離頂部 50px */
-            left: 1035px; /* 距離左側 100px */
+            top:  260px;   /* 距離頂部 50px */
+            left: 1020px; /* 距離左側 100px */
             cursor: pointer;
+            z-index: 1001;
         }
 
         .button-a:active {
@@ -98,7 +101,7 @@
     </div>
     <!-- 背景音樂開關 -->
     <div class="audio-control" onclick="toggleAudio()">
-        <img src="/material/music-on.png" alt="">
+        <img src="/material/music-on.png" alt="music">
     </div>
 </div>
 
@@ -109,7 +112,7 @@
     </div>
     <div class="gameboyScreen">
         <!-- gameboy video -->
-        <video src="/material/test.mp4" autoplay loop muted></video>
+        <video src="/material/gamevideo.mp4" autoplay loop muted></video>
         <a href="loginpage.html">
             <img src="/material/button-a.png" alt="" class="button-a" >
         </a>
@@ -143,6 +146,12 @@
             control.innerHTML = '<img src="/material/music-off.png" alt="Music On" width="30">';
         }
     }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'A' || event.key === 'a') {
+            window.location.href = 'loginpage.html';
+        }
+    });
 
 </script>
 </body>
