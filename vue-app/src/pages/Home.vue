@@ -25,7 +25,7 @@ import GameboyFrame from "../components/GameboyFrame.vue";
 import GameboyScreen from "../components/GameboyScreen.vue";
 </script>
 
-<style>
+<style scoped>
 
 body {
   background: black;
