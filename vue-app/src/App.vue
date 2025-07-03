@@ -1,10 +1,5 @@
 <script setup>
 
-const auth = useAuthStore()
-const token = localStorage.getItem('token')
-if (token) {
-  auth.token = token
-}
 
 </script>
 

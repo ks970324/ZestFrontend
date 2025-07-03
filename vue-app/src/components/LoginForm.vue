@@ -28,44 +28,78 @@
         />
         Remember me
       </label>
+
       <div class="buttons">
-      <LoginAction type="submit" #login>Go!</LoginAction>
-      <LoginAction to="/register" #register>Join us!</LoginAction>
+        <LoginAction type="submit">
+          <template #login>
+            Go!
+          </template>
+        </LoginAction>
+
+        <LoginAction to="/register">
+          <template #register>
+            Join us!
+          </template>
+        </LoginAction>
       </div>
     </form>
   </div>
-
 </template>
 
-<script setup>
 
+<script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
-import {onMounted} from "vue";
-import LoginAction from "./LoginAction.vue";
+import LoginAction from './LoginAction.vue'
+import { onMounted } from 'vue'
+import { jwtDecode } from 'jwt-decode'
+import axios from "axios";
+
+const token = localStorage.getItem('token')
+const savedremember = localStorage.getItem('remember') === 'true'
 
 const email = ref('')
 const password = ref('')
-const remember = ref(false)
 const showError = ref(false)
+const remember = ref(savedremember)
 
 const auth = useAuthStore()
 const router = useRouter()
 
+onMounted(async () => {
+  if (token && savedremember) {
+    const decoded = jwtDecode(token)
+    const now = Date.now() / 1000
 
+    if (decoded.exp > now) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      try {
+        const { data } = await axios.get('http://localhost:5057/api/ZestAuth/me')
+        auth.token = token
+        auth.user = data.user
+        router.replace('/gamelobby')
+      } catch {
+        localStorage.removeItem('token')
+        localStorage.removeItem('remember')
+        // auth.logout()
+      }
+    } else {
+      localStorage.removeItem('token')
+      localStorage.removeItem('remember')
+      // auth.logout()
+    }
+  }
+})
 
-
-async function handleLogin() {
-  const success = await auth.login(email.value, password.value)
+const handleLogin = async () => {
+  const success = await auth.login(email.value, password.value, remember.value)
 
   if (success) {
     router.push('/gamelobby')
   } else {
     showError.value = true
   }
-
-
 }
 </script>
 
