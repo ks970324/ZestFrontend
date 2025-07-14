@@ -1,11 +1,16 @@
 <template>
-  <div class="audio-control" @click="toggleAudio()">
+  <div :class="AudioClass" @click="toggleAudio" :style="AudioStyle">
     <img :src="isPlaying ? '/material/music-on.png' : '/material/music-off.png'" alt="music" width="30" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+
+defineProps({
+  AudioClass: String,
+  AudioStyle: [String, Object]
+})
 
 const isPlaying = ref(true)
 let audioElement = null
@@ -36,18 +41,5 @@ function toggleAudio() {
 </script>
 
 <style scoped>
-.audio-control {
-  justify-self: end;
-  margin: 10px;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.audio-control:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
 
 </style>

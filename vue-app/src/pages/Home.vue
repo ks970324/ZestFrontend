@@ -1,8 +1,9 @@
 
 <template>
+  <div class="home">
   <div class="header">
     <div class="title">Zest</div>
-    <AudioToggle />
+    <AudioToggle AudioClass="audio-control" />
   </div>
 
   <div class="gameboy">
@@ -15,7 +16,7 @@
     <source src="/music/homepage.mp3" type="audio/mp3" />
     Your browser does not support the audio element.
   </audio>
-
+  </div>
 
 </template>
 
@@ -27,12 +28,13 @@ import GameboyScreen from "../components/GameboyScreen.vue";
 
 <style scoped>
 
-body {
+.home {
   background: black;
   font-family: "Press Start 2P", sans-serif;
   margin: 0;
   padding: 0;
   position: relative;
+  height: 100vh;
 }
 
 .header {
@@ -47,6 +49,18 @@ body {
   color: white;
   font-size: 60px;
   margin-top: 50px;
+}
+
+.audio-control {
+  justify-self: end;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.audio-control:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 
