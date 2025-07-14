@@ -6,7 +6,7 @@ import axios from 'axios'
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         token: localStorage.getItem('token') || null,
-        user: null,
+        user: localStorage.getItem('user') || null,
         loginError: null,
         remember: localStorage.getItem('remember') || false
     }),
@@ -29,6 +29,9 @@ export const useAuthStore = defineStore('auth', {
 
                     // save remember
                     localStorage.setItem('remember', data.remember)
+
+                    // save user
+                    localStorage.setItem('user', JSON.stringify(this.user))
 
                     return data
 
