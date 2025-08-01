@@ -14,11 +14,11 @@
 
 .scroll-box {
   max-width: 505px;
-  height: 500px; /* 固定高度，讓它能滾動 */
+  height: 550px; /* 固定高度，讓它能滾動 */
   color: #845736;
   overflow: auto; /* 讓內容區域內部滾動 */
-  display: grid;
   margin: 0 ;
+  margin-top: 30px;
 
 }
 
