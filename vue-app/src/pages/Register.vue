@@ -2,13 +2,36 @@
   <div class="register-page">
     <ScrollBox>
       <UserinfoForm />
+      <CharacterSelect/>
+      <SignatureCanvas />
+      <div class="submit-button">
+        <button class="submit_button" @click="handleSubmit">Submit</button>
+      </div>
     </ScrollBox>
   </div>
 </template>
+
 <script setup>
 
 import ScrollBox from '../components/Scrollbox.vue'
 import UserinfoForm from '../components/UserinfoForm.vue'
+import CharacterSelect from '../components/CharacterSelect.vue'
+import SignatureCanvas from '../components/SignatureCanvas.vue'
+import { useRegisterStore} from "../stores/register.js";
+
+const registerStore = useRegisterStore()
+
+const handleSubmit = async () => {
+
+  const success = await registerStore.register()
+  console.log('register 回傳:', success)
+
+
+  if (success) {
+    console.log('register success:', success)
+  }
+
+}
 
 </script>
 
@@ -29,6 +52,24 @@ import UserinfoForm from '../components/UserinfoForm.vue'
   display: grid;
   justify-content: center;
   align-items: center;
+}
+
+.submit-button {
+  text-align: center;
+}
+
+.submit_button {
+  margin-top: 10px;
+  font-family: "Press Start 2P", sans-serif;
+  background-color: transparent;
+  border: none;
+  color: #845736;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.submit_button:active {
+  transform: translateY(3px); /* 點擊時向下移動 3px */
 }
 
 </style>
