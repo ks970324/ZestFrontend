@@ -1,7 +1,8 @@
 import axios from "axios";
 
-export async function checkApi (email) {
-    return axios.post('http://localhost:5057/api/', {
-        email
+export async function checkemailapi(email) {
+    const response = await axios.get('http://localhost:5057/api/register/checkemail', {
+        params: { email }
+    })
+    return response.data
 }
-    )}
