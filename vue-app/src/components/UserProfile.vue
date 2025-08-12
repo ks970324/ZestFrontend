@@ -25,7 +25,7 @@ defineExpose({ openProfile })
   <div class="user-profile" v-if="isProfileOpen">
     <div class="user-profile-info">
       <div class="user-profile-img"></div>
-      <div class="user-profile-name"> {{ email }}</div>
+      <div class="user-profile-name"> user {{ email }}</div>
     </div>
     <button class="close-btn" @click="closeProfile">Close</button>
   </div>
@@ -43,11 +43,13 @@ defineExpose({ openProfile })
   width: 30%;
   height: 60%;
   background-color: black;
-  display: flex;
-  align-items: center;
+  display: block;
   justify-content: center;
   z-index: 1000;
-  color: #ffce3c;
+}
+
+.user-profile-info{
+  color: white;
 }
 
 .close-btn {
