@@ -1,11 +1,31 @@
 <template>
   <div class="register-page">
+    <div class="login-page">
+      <div class="header">
+        <a href='/'><img src="/material/logo.png" alt="home" class="home-icon"></a>
+      </div>
+    </div>
     <ScrollBox>
       <UserinfoForm />
       <CharacterSelect/>
       <SignatureCanvas />
       <div class="submit-button">
         <button class="submit_button" @click="handleSubmit">Submit</button>
+      </div>
+      <div class="error-message" v-if="registerStore.submitError">
+        <div class="error-message-content">
+          <p>error</p>
+          Please complete the required user information and check if valid.
+        </div>
+        <button class="close-btn" @click="closeError">Close</button>
+      </div>
+      <div class="redirect" v-if="successregister">
+        <div class="redirect-content">
+          <p>Success</p>
+          <p>Congratulations to join us!</p>
+          <p>Press "Login" to log in.</p>
+        </div>
+        <button class="login-btn" @click="loginpage">Login</button>
       </div>
     </ScrollBox>
   </div>
@@ -18,20 +38,34 @@ import UserinfoForm from '../components/UserinfoForm.vue'
 import CharacterSelect from '../components/CharacterSelect.vue'
 import SignatureCanvas from '../components/SignatureCanvas.vue'
 import { useRegisterStore} from "../stores/register.js";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const registerStore = useRegisterStore()
+const successregister = ref(false)
+
+function closeError() {
+  registerStore.submitError = false
+}
+
+function loginpage() {
+  router.push('/login')
+}
+
 
 const handleSubmit = async () => {
 
   const success = await registerStore.register()
-  console.log('register 回傳:', success)
 
+  if (success.message) {
+    console.log('register success:', success.message)
+    successregister.value = true
 
-  if (success) {
-    console.log('register success:', success)
   }
 
 }
+
 
 </script>
 
@@ -70,6 +104,68 @@ const handleSubmit = async () => {
 
 .submit_button:active {
   transform: translateY(3px); /* 點擊時向下移動 3px */
+}
+
+.error-message {
+  font-family: 'Press Start 2P', sans-serif;
+  position: fixed;
+  left: 33%;
+  top: 40%;
+  width: 35%;
+  height: 25%;
+  background-color:white;
+  display: block;
+  justify-content: center;
+  z-index: 1000;
+  text-align: center;
+  border: 5px solid #845736;
+  border-radius: 20px;
+}
+
+.close-btn {
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  color: white;
+  background-color: #BE8760;
+  padding: 10px;
+  margin-top: 25px;
+  border: none;
+}
+
+.close-btn:hover {
+  background-color: #845736;
+}
+
+.redirect {
+  font-family: 'Press Start 2P', sans-serif;
+  position: fixed;
+  left: 33%;
+  top: 40%;
+  width: 35%;
+  height: 25%;
+  background-color:white;
+  display: block;
+  justify-content: center;
+  z-index: 1000;
+  text-align: center;
+  border: 5px solid #845736;
+  border-radius: 20px;
+}
+
+.login-btn {
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  color: white;
+  background-color: #BE8760;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+}
+
+.login-btn:hover {
+  background-color: #845736;
 }
 
 </style>

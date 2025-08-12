@@ -44,6 +44,7 @@ watchEffect(() => {
   }, 300)
 
   registerStore.email = newEmail
+  registerStore.emailExists = emailExists.value
 
 })
 
@@ -72,6 +73,7 @@ watchEffect(() => {
   }, 300)
 
   registerStore.password = newPassword
+  registerStore.checkpassword = checkpassword.value
 
 
 })

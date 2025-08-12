@@ -6,20 +6,31 @@ export const useRegisterStore = defineStore('register', {
         email: '',
         password: '',
         characterspath: '',
-        loading: false
+        submitError: false,
+        emailExists: undefined,
+        checkpassword: undefined
     }),
 
     actions: {
         async register() {
-            console.log('register action start')
             try {
-                const data = await registerApi(this.email, this.password, this.characterspath)
+                console.log('前端傳送資料:', this.email, this.password, this.characterspath,this.emailExists,this.checkpassword)
+                if (!this.email || !this.password || !this.characterspath) {
+                    return this.submitError = true
+                }
 
-                console.log('後端回傳 data:', data)
+                if (this.checkpassword === false || this.emailExists === true) {
+                    return this.submitError = true
+                }
 
-                if (data.status) {
-                    this.loading = true
-                    return data
+
+                const response = await registerApi(this.email, this.password, this.characterspath)
+
+                console.log('後端回傳 data:', response.data)
+                console.log('後端回傳 status:', response.status)
+
+                if (response.status) {
+                    return response.data
                 }
 
             } catch (err) {

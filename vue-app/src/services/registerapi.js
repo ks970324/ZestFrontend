@@ -6,5 +6,5 @@ export async function registerApi(email, password, characterspath) {
         password,
         characterspath
     })
-    return response.data
+    return response
 }
