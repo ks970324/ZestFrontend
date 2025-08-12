@@ -98,10 +98,10 @@ watchEffect(() => {
         required placeholder=""
     />
     <span v-if="emailExists === true">
-      <img src="/material/remove.png" alt="email" class="checkicon">
+      <img src="/material/fail.png" alt="email" class="checkicon">
     </span>
     <span v-else-if="emailExists === false" style="color: red;">
-       <img src="/material/check.png" alt="email" class="checkicon">
+       <img src="/material/pass.png" alt="email" class="checkicon">
     </span>
     <br>
     <div v-if="emailError" class="errormessage">
@@ -124,10 +124,10 @@ watchEffect(() => {
         required placeholder=""
         v-model="confirmpassword">
     <span v-if="checkpassword === false">
-      <img src="/material/remove.png" alt="email" class="checkicon">
+      <img src="/material/fail.png" alt="email" class="checkicon">
     </span>
     <span v-else-if="checkpassword === true" >
-       <img src="/material/check.png" alt="email" class="checkicon">
+       <img src="/material/pass.png" alt="email" class="checkicon">
     </span>
     <br>
 
