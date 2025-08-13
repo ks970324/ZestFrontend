@@ -5,6 +5,10 @@
       </a>
       <DropdownMenu />
     </div>
+    <div class="game-choose">
+      <GameChoose />
+    </div>
+
 
     <!-- background music -->
     <audio id="background-audio" autoplay loop>
@@ -16,6 +20,7 @@
 
 <script setup>
 import DropdownMenu from '../components/DropdownMenu.vue';
+import GameChoose from '../components/GameChoose.vue';
 import UserProfile from "../components/UserProfile.vue";
 
 </script>
