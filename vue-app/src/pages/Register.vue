@@ -1,7 +1,7 @@
 <template>
   <div class="register-page">
-    <div class="login-page">
-      <div class="header">
+    <div class="header">
+      <div class="home">
         <a href='/'><img src="/material/logo.png" alt="home" class="home-icon"></a>
       </div>
     </div>
@@ -87,6 +87,32 @@ const handleSubmit = async () => {
   justify-content: center;
   align-items: center;
 }
+
+.header {
+  margin:0;
+  width:100%;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.home-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.header img {
+  width:36px;
+  padding: 3px;
+}
+
+
 
 .submit-button {
   text-align: center;
