@@ -4,9 +4,15 @@ import AudioToggle from '../components/AudioToggle.vue';
 import { ref } from 'vue'
 
 const modalRef = ref()
+const showDropdown = ref(false)
+
 
 function openModal() {
   modalRef.value?.openProfile()
+}
+
+function toggleDropdown() {
+  showDropdown.value = !showDropdown.value
 }
 
 
@@ -15,10 +21,10 @@ function openModal() {
 <template>
   <div class="dropdown">
     <!-- 主按鈕圖片 -->
-    <img src="/material/bag.png" alt="bag">
+    <img src="/material/bag.png" alt="bag" @click="toggleDropdown">
 
     <!-- 下拉圖片選單 -->
-    <div class="dropdown-content">
+    <div class="dropdown-content" v-show="showDropdown">
       <div class="dropdown-profile"  >
           <img src="/material/profile.png" alt="profile" @click="openModal">
       </div>
@@ -35,16 +41,16 @@ function openModal() {
 .dropdown {
   position: relative;
   display: inline-block;
-  left:91%;
+  left:90%;
+  cursor: pointer;
 }
 
 .dropdown-content {
-  display: none;
   position: absolute;
-  top: 100%;
   right: 5%;
   background-color: #ab9377;
   border: black solid 3px;
+  z-index: 5;
 }
 
 .dropdown-profile{
@@ -76,8 +82,6 @@ function openModal() {
   cursor: pointer;
 }
 
-.dropdown:hover .dropdown-content {
-  display: block;
-}
+
 
 </style>
