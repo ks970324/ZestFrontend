@@ -86,7 +86,7 @@ function gamestart() {
   padding: 10px;
   position: absolute;
   right: -110%;
-  top: 10%;
+  top: 50%;
   width: 250%;
   height: 150%;
   z-index: 3;
