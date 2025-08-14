@@ -1,9 +1,12 @@
 import axios from "axios";
 
-export async function getcharacterApi(email, password) {
-    const response = await axios.post('http://localhost:5057/api/', {
-        email,
-        password
+const token = localStorage.getItem('token')
+
+export async function getcharacterApi() {
+    const response = await axios.get('http://localhost:5057/api/ZestAuth/getcharacters', {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
     })
     return response
 }

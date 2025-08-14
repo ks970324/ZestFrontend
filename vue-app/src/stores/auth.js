@@ -1,6 +1,7 @@
 // 📁 src/stores/auth.js
 import { defineStore } from 'pinia'
 import { loginApi } from '../services/authApi'
+import { getcharacterApi } from '../services/getcharacter'
 import axios from 'axios'
 
 export const useAuthStore = defineStore('auth', {
@@ -8,7 +9,8 @@ export const useAuthStore = defineStore('auth', {
         token: localStorage.getItem('token') || null,
         user: localStorage.getItem('user') || null,
         loginError: null,
-        remember: localStorage.getItem('remember') || false
+        remember: localStorage.getItem('remember') || false,
+        character: null
     }),
 
     actions: {
@@ -45,4 +47,15 @@ export const useAuthStore = defineStore('auth', {
             }
         },
     },
+
+        async getcharacter() {
+            try {
+                const { data } = await getcharacterApi()
+                this.character = data.characterpath
+                return data.characterpath
+            } catch (err) {
+                this.loginError = 'Network or server error'
+                return false
+            }
+        },
 })

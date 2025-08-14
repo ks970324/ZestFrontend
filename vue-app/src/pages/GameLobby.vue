@@ -5,8 +5,14 @@
       </a>
       <DropdownMenu />
     </div>
-    <div class="game-choose">
-      <GameChoose />
+    <div class="user-game">
+      <div class="user-character">
+        <Character />
+      </div>
+      <div class="game-choose">
+        <GameChoose />
+      </div>
+
     </div>
 
 
@@ -22,6 +28,7 @@
 import DropdownMenu from '../components/DropdownMenu.vue';
 import GameChoose from '../components/GameChoose.vue';
 import UserProfile from "../components/UserProfile.vue";
+import Character from '../components/Character.vue';
 
 </script>
 
@@ -51,4 +58,11 @@ import UserProfile from "../components/UserProfile.vue";
   width:36px;
   padding: 3px;
 }
+
+.user-game {
+  display: flex;
+  position: relative;
+}
+
+
 </style>
