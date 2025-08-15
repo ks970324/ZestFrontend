@@ -23,11 +23,17 @@ defineExpose({ openProfile })
 <template>
 
   <div class="user-profile" v-if="isProfileOpen">
+    <div class="user-profile-header">
+      <div class="user-profile-title">User Profile</div>
+      <div class="user-profile-close">
+        <button class="close-btn" @click="closeProfile">&times;</button>
+      </div>
+    </div>
     <div class="user-profile-info">
-      <div class="user-profile-img"></div>
+      <div class="user-profile-img">User :</div>
       <div class="user-profile-name"> user {{ email }}</div>
     </div>
-    <button class="close-btn" @click="closeProfile">Close</button>
+
   </div>
 
 
@@ -38,31 +44,52 @@ defineExpose({ openProfile })
 .user-profile {
   font-family: 'Press Start 2P', sans-serif;
   position: fixed;
-  left: 40%;
+  left: 35%;
   top: 20%;
   width: 30%;
-  height: 60%;
-  background-color: black;
+  height: 40%;
+  background-color: white;
   display: block;
   justify-content: center;
   z-index: 1000;
+  border: 5px solid #6F5B44;
+}
+
+
+.user-profile-header{
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  color: black;
+  background-color: #B39D84;
+  align-items: center;
+  border: 5px solid white;
+  border-bottom: none;
 }
 
 .user-profile-info{
-  color: white;
+  color: black;
+  margin: 7px;
+  background-color: #C5B4A0;
+  font-size: 12px;
+  height: 70%;
+  padding: 5px;
+  border: 5px solid #6F5B44;
 }
+
 
 .close-btn {
   font-family: 'Press Start 2P', sans-serif;
-  font-size: 18px;
+  font-size: 24px;
   cursor: pointer;
-  color: #000000;
-  background-color: #ffce3c;
-  padding: 10px;
+  color: #6F5B44;
+  background-color: #F0F0F0;
+  padding: 2px;
+  border: 3px solid #6F5B44;
 }
 
 .close-btn:hover {
-  background-color: #ff9600;
+  background-color: #BEBEBE	;
 }
 
 
