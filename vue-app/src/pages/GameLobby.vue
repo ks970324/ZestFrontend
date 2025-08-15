@@ -11,6 +11,7 @@
       </div>
       <div class="game-choose">
         <GameChoose />
+        <bird />
       </div>
 
     </div>
@@ -29,6 +30,7 @@ import DropdownMenu from '../components/DropdownMenu.vue';
 import GameChoose from '../components/GameChoose.vue';
 import UserProfile from "../components/UserProfile.vue";
 import Character from '../components/Character.vue';
+import bird from '../components/bird.vue';
 
 </script>
 
