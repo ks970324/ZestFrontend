@@ -72,17 +72,11 @@ function gamestart() {
   font-family: "Press Start 2P", sans-serif;
   font-size: 25px;
   color: #ffce3c;
-  text-shadow:
-      -3px -3px 0 black,
-      2px -2px 0 black,
-      -2px  2px 0 black,
-      -2px  2px 0 black,
-      2px  2px 0 black;
   text-align: center;
 
   opacity: 0;
   transition: opacity 0.4s ease;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
   padding: 10px;
   position: absolute;
   right: -110%;

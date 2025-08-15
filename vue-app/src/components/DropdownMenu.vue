@@ -42,6 +42,7 @@ function toggleDropdown() {
   position: relative;
   display: inline-block;
   left:90%;
+  top: 5px;
   cursor: pointer;
 }
 
