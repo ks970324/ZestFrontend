@@ -9,8 +9,7 @@ const characterspath = ref('')
 
 onMounted(async () => {
     try {
-      const { data } = await auth.getcharacter()
-      characterspath.value = data
+      characterspath.value = await auth.getcharacter()
     } catch (err) {
       console.log(err)
       characterspath.value = '/material/boy_brown_blue.png'
