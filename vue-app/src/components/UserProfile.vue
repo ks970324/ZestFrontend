@@ -1,11 +1,23 @@
 <script setup>
 
 import { useAuthStore } from '../stores/auth'
-import { ref } from 'vue'
+import { ref, onMounted} from 'vue'
 
 
 const authStore = useAuthStore()
 const email = authStore.user?.email || 'Login to see your profile'
+
+const characterspath = ref('')
+
+onMounted(async () => {
+  try {
+    const characterPath = await authStore.getcharacter()
+    characterspath.value = characterPath  || '/material/boy_brown_blue.png'
+  } catch (err) {
+    console.log(err)
+    characterspath.value = '/material/boy_brown_blue.png'
+  }
+})
 
 const isProfileOpen = ref(false)
 
@@ -30,8 +42,10 @@ defineExpose({ openProfile })
       </div>
     </div>
     <div class="user-profile-info">
-      <div class="user-profile-img">User :</div>
-      <div class="user-profile-name"> user {{ email }}</div>
+      <div class="user-profile-img">
+        <img :src="characterspath" alt="character-img">
+      </div>
+      <div class="user-profile-name">UserName: {{ email }}</div>
     </div>
 
   </div>
@@ -75,6 +89,23 @@ defineExpose({ openProfile })
   height: 70%;
   padding: 5px;
   border: 5px solid #6F5B44;
+  display: flex;
+}
+
+.user-profile-name{
+  font-size: 15px;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.user-profile-img{
+  background-color: white;
+  height: 30%;
+  padding: 5px;
+  border: 2px solid #6F5B44;
+  width: 15%;
+  margin-bottom: 15px;
+  margin-right: 15px;
 }
 
 

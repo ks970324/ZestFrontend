@@ -46,16 +46,20 @@ export const useAuthStore = defineStore('auth', {
                 return false
             }
         },
-    },
 
         async getcharacter() {
             try {
-                const { data } = await getcharacterApi()
-                this.character = data.characterpath
-                return data.characterpath
+                const response = await getcharacterApi()
+                const data = response.data
+                this.character = data.characterspath
+                return data.characterspath
             } catch (err) {
                 this.loginError = 'Network or server error'
                 return false
             }
         },
+
+
+    },
+
 })
