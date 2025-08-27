@@ -13,7 +13,6 @@
               v-for="option in genders"
               :key="option"
               class="gender-icon"
-              :class="{ selected: character.gender === option }"
               @click="character.gender = option"
           >
             <img :src="`material/gender-${option[0]}.png`" :alt="option" />
@@ -29,7 +28,6 @@
               v-for="color in hairs"
               :key="color"
               class="hair-color"
-              :class="{ selected: character.hair === color }"
               @click="character.hair = color"
           >
             <img :src="`material/${color}color.png`" :alt="color" />
@@ -45,7 +43,6 @@
               v-for="color in clothes"
               :key="color"
               class="clothes-color"
-              :class="{ selected: character.clothes === color }"
               @click="character.clothes = color"
           >
             <img :src="`material/${color}color.png`" :alt="color" />
