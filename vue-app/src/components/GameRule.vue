@@ -1,20 +1,27 @@
 <script setup>
 import { ref } from 'vue'
 
-const isRuleOpen = ref(true)
+const isStartRuleOpen = ref(true)
+const isRuleOpen = ref(false)
 
 function toggleRule() {
+  isStartRuleOpen.value = !isStartRuleOpen.value
+}
+
+function checkRule() {
   isRuleOpen.value = !isRuleOpen.value
 }
 
+
+
 defineExpose({
-  toggleRule
+  checkRule
 })
 
 </script>
 
 <template>
-  <div class="game-rule" v-if="isRuleOpen">
+  <div class="game-rule" v-if="isStartRuleOpen || isRuleOpen">
     <div class="game-rule-content">
       <div class="game-rule-text" >
         <p><h1>Game rule</h1></p>
@@ -28,7 +35,8 @@ defineExpose({
           <li>If the distance is 3–4 tiles: deduct 0.5 heart.</li>
         </ul>
       </div>
-      <span class="startBtn" @click="toggleRule">Start Game</span>
+      <span class="Btn" @click="toggleRule" v-if="isStartRuleOpen">Start Game</span>
+      <span class="Btn" @click="checkRule" v-if="isRuleOpen">Keep Game</span>
     </div>
   </div>
 </template>
@@ -36,8 +44,8 @@ defineExpose({
 <style scoped>
 
 .game-rule {
-  position: fixed; /* 固定在視窗 */
-  z-index: 1000; /* 在最上層 */
+  position: fixed;
+  z-index: 1000;
   left: 0;
   top: 0;
   width: 100%;
@@ -48,7 +56,7 @@ defineExpose({
 .game-rule-content {
   text-align: center;
   background-color: #000000;
-  margin: 10% auto; /* 垂直間距＋置中 */
+  margin: 10% auto;
   width: 900px;
   height: auto;
   padding: 40px;
@@ -73,7 +81,7 @@ defineExpose({
   color:white;
 }
 
-.startBtn {
+.Btn {
   font-size: 18px;
   cursor: pointer;
   color: #000000;
@@ -81,7 +89,7 @@ defineExpose({
   padding: 10px;
 }
 
-.startBtn:hover {
+.Btn:hover {
   background-color: #ff9600;
 }
 
