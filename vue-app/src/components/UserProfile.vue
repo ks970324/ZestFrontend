@@ -3,10 +3,8 @@
 import { useAuthStore } from '../stores/auth'
 import { ref, onMounted} from 'vue'
 
-
 const authStore = useAuthStore()
 const email = authStore.user?.email || 'Login to see your profile'
-
 const characterspath = ref('')
 
 onMounted(async () => {
