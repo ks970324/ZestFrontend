@@ -3,7 +3,7 @@
     <button  v-if="$slots.login" type="submit" class="login-btn">
       <slot name="login" />
     </button>
-    <RouterLink :to="to"  v-if="$slots.register"class="register-btn">
+    <RouterLink v-if="$slots.register && to" :to="to" class="register-btn">
       <slot name="register"/>
     </RouterLink>
   </div>
@@ -14,11 +14,9 @@
 defineProps({
   to: {
     type: String,
-    required: true
+    required: false
   }
 })
-
-
 
 
 </script>
