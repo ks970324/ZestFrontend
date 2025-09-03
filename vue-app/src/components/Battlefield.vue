@@ -8,14 +8,14 @@
         <div
             v-for="x in 3" :key="'blue-cell-' + x"
             class="grid-item blue"
-            @click="blueCellClicked(x-1, y-1); handleKeyDown();"
+            @click="blueCellClicked(x-1, y-1)"
         >
-          <img v-if="playerPos.x === x-1 && playerPos.y === y-1" :src="playerimg" />
+          <img v-if="BluePosition.x === x-1 && BluePosition.y === y-1" :src="playerimg" />
         </div>
       </div>
     </div>
 
-    <!-- 紅方九宮格 -->
+    <!-- red-->
     <div class="grid-container">
       <div
           v-for="y in 3" :key="'red-row-' + y"
@@ -25,30 +25,51 @@
             v-for="x in 3" :key="'red-cell-' + x"
             class="grid-item red"
         >
-          <img v-if="enemyPos.x === x-1 && enemyPos.y === y-1" src="/material/robot.png" />
+          <img v-if="RedPosition.x === x-1 && RedPosition.y === y-1" src="/material/robot.png" />
         </div>
       </div>
+    </div>
+    <div class="bullet" v-if="bullet.visible" :style="bulletStyle">
+      <img src="/material/bullet.png" alt="bullet" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch, reactive, computed} from 'vue'
 import { useAuthStore} from "../stores/auth.js";
-
+import { useGameStore} from "../stores/game.js";
+import { storeToRefs } from 'pinia'
 const auth = useAuthStore()
+const game = useGameStore()
+const { BluePosition, RedPosition } = storeToRefs(game)
 
-
-
-const playerPos = ref({ x: 1, y: 1 }) // 藍方初始位置
-const enemyPos  = ref({ x: 1, y: 1 }) // 紅方初始位置
 const step = 1
-
 const playerimg = ref('')
 
+const bullet = reactive({
+  visible: false,
+  x: 0,
+  y: 0,
+  transition: 'none'
+})
+
+const bulletStyle = computed(() => ({
+  position: "absolute",
+  left: bullet.x + "px",
+  top: bullet.y + "px",
+  transition: bullet.transition,
+}))
+
+
+watch(BluePosition, (newVal) => {
+  localStorage.setItem('BluePos', JSON.stringify(newVal))
+}, { deep: true })
+
 function blueCellClicked(x, y) {
-  console.log('點擊藍方格子', x, y)
-  playerPos.value = { x, y } // 移動玩家
+  BluePosition.value = { x, y }
+  console.log('Blue Position', x, y)
+  game.updateblueposition()
 }
 
 onMounted(async () => {
@@ -60,13 +81,16 @@ onMounted(async () => {
     playerimg.value = '/material/boy_brown_blue.png'
   }
 
-  onUnmounted(() => {
-    // 避免記憶體洩漏
-    window.removeEventListener("keydown", handleKeyDown)
-  })
+  localStorage.setItem('BluePos', JSON.stringify(BluePosition.value))
+  localStorage.setItem('RedPos', JSON.stringify(RedPosition.value))
+})
+
+onUnmounted(() => {
+  window.removeEventListener("keydown", handleKeyDown)
+})
 
 function handleKeyDown(e){
-    let { x, y } = playerPos.value
+    let { x, y } = BluePosition.value
     switch (e.key) {
         case 'ArrowUp':
           y -= step; break
@@ -81,19 +105,57 @@ function handleKeyDown(e){
   x = Math.max(0, Math.min(2, x))
   y = Math.max(0, Math.min(2, y))
 
-    playerPos.value = { x, y }
+  BluePosition.value = { x, y }
+  game.updateblueposition()
+
 }
 
-
-
+// --- 監聽 store 的 Hit ---
+watch(() => game.Hit, (hit) => {
+  if(hit) {
+    hitEffect(BluePosition.value, RedPosition.value, game.CurrentRound)
+    game.Hit = ''
+  }
 })
+async function hitEffect(BluePos, RedPos, CurrentRound) {
+  const cellSize = 125
+  const gap = 40
+  const redOffsetX = 3 * cellSize + gap;
+  let startX, startY, endX, endY
+
+  if(CurrentRound === "red") {
+    startX = RedPos.x * cellSize + redOffsetX
+    startY = RedPos.y * cellSize
+    endX = BluePos.x * cellSize
+    endY = BluePos.y * cellSize
+  } else {
+    startX = BluePos.x * cellSize
+    startY = BluePos.y * cellSize
+    endX = RedPos.x * cellSize + redOffsetX
+    endY = RedPos.y * cellSize
+  }
+
+  bullet.transition = "none"
+  bullet.x = startX + cellSize/2;
+  bullet.y = startY + cellSize/2;
+  bullet.visible = true
+
+  setTimeout(() => {
+    bullet.transition = "all 0.4s ease-in";
+    bullet.x = endX + cellSize/2;
+    bullet.y = endY + cellSize/2;
+  }, 20)
+
+  setTimeout(() => bullet.visible = false, 450)
+}
 
 </script>
 
 <style scoped>
 .battlefield {
   display: flex;
-  gap: 40px; /* 兩個九宮格間距 */
+  gap: 40px;
+  position: relative;
 }
 
 .grid-container {
@@ -122,5 +184,18 @@ function handleKeyDown(e){
 
 .grid-item img {
   width: 80%;
+}
+
+.bullet {
+  position: absolute;
+  justify-content: center;
+}
+
+.bullet img {
+  pointer-events: none;
+  z-index: 10;
+  width: 50px;
+  height: 50px;
+
 }
 </style>
