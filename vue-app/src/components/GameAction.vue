@@ -1,16 +1,25 @@
 <script setup>
+import { useGameStore } from '../stores/game'
+const game = useGameStore()
+
+const attack = async () => {
+  const result = await game.attack()
+}
+
+
 
 </script>
 
 <template>
   <div class="buttons">
     <div class="AttackButton" id="AttackButton">
-      <button>Attack</button>
+      <button @click="attack()">Attack</button>
     </div>
     <div class="MoveButton" id="MoveButton">
       <button>Finish Move</button>
     </div>
   </div>
+
 </template>
 
 <style scoped>
@@ -38,9 +47,6 @@
 
 .buttons button:active {
   top: 3px; /* 向下移動 3px */
-}
-
-#MoveButton, #AttackButton {
 }
 
 </style>
