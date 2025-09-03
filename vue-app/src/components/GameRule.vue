@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from 'vue'
+import { useGameStore } from '../stores/game'
+const game = useGameStore()
 
 const isStartRuleOpen = ref(true)
 const isRuleOpen = ref(false)
@@ -12,7 +14,9 @@ function checkRule() {
   isRuleOpen.value = !isRuleOpen.value
 }
 
-
+async function startGame() {
+   const result = await game.newgame()
+}
 
 defineExpose({
   checkRule
@@ -35,7 +39,7 @@ defineExpose({
           <li>If the distance is 3–4 tiles: deduct 0.5 heart.</li>
         </ul>
       </div>
-      <span class="Btn" @click="toggleRule" v-if="isStartRuleOpen">Start Game</span>
+      <span class="Btn" @click="toggleRule(); startGame()" v-if="isStartRuleOpen">Start Game</span>
       <span class="Btn" @click="checkRule" v-if="isRuleOpen">Keep Game</span>
     </div>
   </div>
