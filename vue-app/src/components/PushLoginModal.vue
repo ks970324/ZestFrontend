@@ -10,7 +10,7 @@ function loginpage() {
   <div class="redirect">
     <div class="redirect-content">
       <p>*** Fail ***</p>
-      <p>Your session has expired.</p>
+      <p>Your Login has expired.</p>
       <p>Press "Login" to log in.</p>
     </div>
     <button class="login-btn" @click="loginpage">Login</button>
