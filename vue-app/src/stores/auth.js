@@ -10,7 +10,8 @@ export const useAuthStore = defineStore('auth', {
         user: localStorage.getItem('user') || null,
         loginError: null,
         remember: localStorage.getItem('remember') || false,
-        character: null
+        character: null,
+        showLoginModal: false
     }),
 
     actions: {
@@ -54,6 +55,9 @@ export const useAuthStore = defineStore('auth', {
                 this.character = data.characterspath
                 return data.characterspath
             } catch (err) {
+                if (err.response.status === 401) {
+                this.showLoginModal = true
+                }
                 this.loginError = 'Network or server error'
                 return false
             }

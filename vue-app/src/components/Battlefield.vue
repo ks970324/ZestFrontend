@@ -32,6 +32,7 @@
     <div class="bullet" v-if="bullet.visible" :style="bulletStyle">
       <img src="/material/bullet.png" alt="bullet" />
     </div>
+    <PushLoginModal v-if="showLoginModal"/>
   </div>
 </template>
 
@@ -40,9 +41,11 @@ import { ref, onMounted, onUnmounted, watch, reactive, computed} from 'vue'
 import { useAuthStore} from "../stores/auth.js";
 import { useGameStore} from "../stores/game.js";
 import { storeToRefs } from 'pinia'
+import PushLoginModal from './PushLoginModal.vue'
 const auth = useAuthStore()
 const game = useGameStore()
 const { BluePosition, RedPosition } = storeToRefs(game)
+const { showLoginModal } = storeToRefs(auth)
 
 const step = 1
 const playerimg = ref('')
