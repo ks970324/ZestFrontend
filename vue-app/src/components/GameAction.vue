@@ -1,10 +1,17 @@
 <script setup>
 import { useGameStore } from '../stores/game'
 const game = useGameStore()
+import { storeToRefs } from 'pinia'
+const { CurrentRound } = storeToRefs(game)
 
-const attack = async () => {
-  const result = await game.attack()
+const blueattack = async () => {
+  const result = await game.blueattack()
 }
+
+const redattack = async () => {
+  const result = await game.redattack()
+}
+
 
 
 
@@ -12,11 +19,11 @@ const attack = async () => {
 
 <template>
   <div class="buttons">
-    <div class="AttackButton" id="AttackButton">
-      <button @click="attack()">Attack</button>
+    <div class="AttackButton" id="AttackButton" >
+      <button @click="blueattack()" v-if="CurrentRound === 'blue'">Attack</button>
     </div>
     <div class="MoveButton" id="MoveButton">
-      <button>Finish Move</button>
+      <button v-if="CurrentRound === 'red'" @click="redattack()">Finish Move</button>
     </div>
   </div>
 
