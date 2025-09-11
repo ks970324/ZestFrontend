@@ -40,11 +40,11 @@
 import { ref, onMounted, onUnmounted, watch, reactive, computed} from 'vue'
 import { useAuthStore} from "../stores/auth.js";
 import { useGameStore} from "../stores/game.js";
-import { storeToRefs } from 'pinia'
 import PushLoginModal from './PushLoginModal.vue'
 const auth = useAuthStore()
 const game = useGameStore()
-const { BluePosition, RedPosition } = storeToRefs(game)
+import { storeToRefs } from 'pinia'
+const { BluePosition, RedPosition, Attacker, Hit } = storeToRefs(game)
 const { showLoginModal } = storeToRefs(auth)
 
 const step = 1
@@ -114,24 +114,26 @@ function handleKeyDown(e){
 }
 
 // --- 監聽 store 的 Hit ---
-watch(() => game.Hit, (hit) => {
+watch(() => Hit.value, (hit) => {
   if(hit) {
-    hitEffect(BluePosition.value, RedPosition.value, game.CurrentRound)
+    hitEffect(BluePosition.value, RedPosition.value, Attacker.value)
     game.Hit = ''
   }
 })
-async function hitEffect(BluePos, RedPos, CurrentRound) {
+function hitEffect(BluePos, RedPos, attacker) {
   const cellSize = 125
   const gap = 40
-  const redOffsetX = 3 * cellSize + gap;
+  const gridSize = 3 * cellSize
+  const redOffsetX = gridSize + gap;
   let startX, startY, endX, endY
 
-  if(CurrentRound === "red") {
+  if(attacker === "red") {
     startX = RedPos.x * cellSize + redOffsetX
     startY = RedPos.y * cellSize
     endX = BluePos.x * cellSize
     endY = BluePos.y * cellSize
-  } else {
+  }
+  else if (attacker === "blue") {
     startX = BluePos.x * cellSize
     startY = BluePos.y * cellSize
     endX = RedPos.x * cellSize + redOffsetX
