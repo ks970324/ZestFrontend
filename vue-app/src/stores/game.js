@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
 import { updatebluepos } from "../services/updatebluepos.js";
 import { newgame } from "../services/newgame.js";
-import { attack } from "../services/attack.js";
+import { blueattack } from "../services/blueattack.js";
+import { redattack } from "../services/redattack.js";
 
 export const useGameStore = defineStore('game', {
     state: () => ({
-        Bluehealth: 10,
-        Redhealth: 10,
+        BlueHP: 10,
+        RedHP: 10,
         Gameresult: '',
         CurrentRound: localStorage.getItem('CurrentRound'),
         BluePosition: localStorage.getItem('BluePos')
@@ -16,6 +17,7 @@ export const useGameStore = defineStore('game', {
             ? JSON.parse(localStorage.getItem('RedPos'))
             : { x: 1, y: 1 },
         Hit:'',
+        Attacker:'',
     }),
     actions: {
         async updateblueposition() {
@@ -34,7 +36,13 @@ export const useGameStore = defineStore('game', {
         async newgame() {
             try{
                 const data = await newgame()
+                console.log(data)
                 this.CurrentRound = data.currentRound
+                this.BluePosition = data.bluePosition
+                this.RedPosition = data.redPosition
+                this.Attacker = data.attacker
+                localStorage.setItem('BluePos', JSON.stringify(this.BluePosition))
+                localStorage.setItem('RedPos', JSON.stringify(this.RedPosition))
                 localStorage.setItem('CurrentRound', this.CurrentRound)
                 return data
             } catch (error) {
@@ -43,11 +51,46 @@ export const useGameStore = defineStore('game', {
 
         },
 
-        async attack() {
-            const data = await attack(this.BluePosition, this.RedPosition,this.CurrentRound)
-            this.Hit = data.hit
-            return data
+        async blueattack() {
+            try {
+                const data = await blueattack(this.BluePosition, this.RedPosition, this.CurrentRound)
+                console.log(data)
+                this.Hit = data.hit
+                this.RedPosition = data.redPosition
+                this.BluePosition = data.bluePosition
+                localStorage.setItem('RedPos', JSON.stringify(this.RedPosition))
+                this.CurrentRound = data.currentRound
+                localStorage.setItem('CurrentRound', this.CurrentRound)
+                this.Attacker = data.attacker
+                this.BlueHP = data.blueHP
+                this.RedHP = data.redHP
+                this.Gameresult = data.gameResult
+                return data
+            } catch (error) {
+                console.error('blue side attack failed', error)
+            }
         },
+
+        async redattack() {
+            try {
+                const data = await redattack(this.BluePosition, this.RedPosition, this.CurrentRound)
+                console.log(data)
+                this.Hit = data.hit
+                this.BluePosition = data.bluePosition
+                this.RedPosition = data.redPosition
+                localStorage.setItem('BluePos', JSON.stringify(this.BluePosition))
+                this.CurrentRound = data.currentRound
+                localStorage.setItem('CurrentRound', this.CurrentRound)
+                this.Attacker = data.attacker
+                this.BlueHP = data.blueHP
+                this.RedHP = data.redHP
+                this.Gameresult = data.gameResult
+                return data
+            } catch (error) {
+                console.error('red side attack failed', error)
+            }
+        },
+
 
 
     }
