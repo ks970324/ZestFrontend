@@ -15,22 +15,7 @@
 
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
 import LoginForm from '../components/LoginForm.vue'
-
-const email = ref('')
-const password = ref('')
-const auth = useAuthStore()
-const router = useRouter()
-
-async function handleLogin() {
-  const success = await auth.login(email.value, password.value)
-  if (success) {
-    router.push('/gamelobby')
-  }
-}
 </script>
 
 <style scoped>
