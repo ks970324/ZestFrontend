@@ -4,6 +4,7 @@ import Battlefield from "../components/Battlefield.vue";
 import HealthBar from "../components/HealthBar.vue";
 import GameRule from "../components/GameRule.vue";
 import GameAction from "../components/GameAction.vue";
+import GameOverModal from "../components/GameOverModal.vue";
 import {ref} from "vue";
 
 const gamerule = ref()
@@ -28,6 +29,8 @@ function openGameRule() {
       <Battlefield />
       <GameRule ref="gamerule"/>
       <GameAction />
+      <GameOverModal />
+
 
     </div>
 
