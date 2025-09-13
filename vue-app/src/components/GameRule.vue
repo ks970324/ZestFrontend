@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useGameStore } from '../stores/game'
 const game = useGameStore()
+import { startGame } from '../composables/GameController'
 
 const isStartRuleOpen = ref(true)
 const isRuleOpen = ref(false)
@@ -14,12 +15,8 @@ function checkRule() {
   isRuleOpen.value = !isRuleOpen.value
 }
 
-async function startGame() {
-   const result = await game.newgame()
-}
-
 defineExpose({
-  checkRule
+  checkRule,
 })
 
 </script>
