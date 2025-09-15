@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { storeToRefs} from "pinia";
 import { useGameStore } from '../stores/game'
 const game = useGameStore()
@@ -19,6 +19,10 @@ function getHearts(health) {
 
   return hearts
 }
+
+const blueHearts = computed(() => getHearts(BlueHP.value))
+const redHearts = computed(() => getHearts(RedHP.value))
+
 </script>
 
 <template>
@@ -28,7 +32,7 @@ function getHearts(health) {
       <div class="blueplayer-label">Player</div>
       <div class="blueplayer-health">
         <img
-            v-for="(heart, index) in getHearts(BlueHP)"
+            v-for="(heart, index) in blueHearts"
             :key="'blue-' + index"
             :src="heart === 'full' ? '/material/fullheart.png' :
                 heart === 'half' ? '/material/halfheart.png' :
@@ -43,7 +47,7 @@ function getHearts(health) {
       <div class="redplayer-label">Computer</div>
       <div class="redplayer-health">
         <img
-            v-for="(heart, index) in getHearts(RedHP)"
+            v-for="(heart, index) in redHearts"
             :key="'red-' + index"
             :src="heart === 'full' ? '/material/fullheart.png' :
                 heart === 'half' ? '/material/halfheart.png' :

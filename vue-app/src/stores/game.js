@@ -1,14 +1,15 @@
 import { defineStore } from 'pinia'
 import { updatebluepos } from "../services/updatebluepos.js";
-import { newgame } from "../services/newgame.js";
+import { createnewgame } from "../services/newgame.js";
 import { blueattack } from "../services/blueattack.js";
 import { redattack } from "../services/redattack.js";
+import { nextTick } from 'vue'
 
 export const useGameStore = defineStore('game', {
     state: () => ({
         BlueHP: 10,
         RedHP: 10,
-        Gameresult: '',
+        Gameresult: 'still progress',
         CurrentRound: localStorage.getItem('CurrentRound'),
         BluePosition: localStorage.getItem('BluePos')
             ? JSON.parse(localStorage.getItem('BluePos'))
@@ -35,12 +36,15 @@ export const useGameStore = defineStore('game', {
 
         async newgame() {
             try{
-                const data = await newgame()
+                const data = await createnewgame()
                 console.log(data)
                 this.CurrentRound = data.currentRound
                 this.BluePosition = data.bluePosition
                 this.RedPosition = data.redPosition
                 this.Attacker = data.attacker
+                this.RedHP = data.redHP
+                this.BlueHP = data.blueHP
+                this.Gameresult = data.gameResult
                 localStorage.setItem('BluePos', JSON.stringify(this.BluePosition))
                 localStorage.setItem('RedPos', JSON.stringify(this.RedPosition))
                 localStorage.setItem('CurrentRound', this.CurrentRound)
