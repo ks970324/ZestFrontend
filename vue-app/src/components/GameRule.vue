@@ -1,28 +1,23 @@
 <script setup>
 import { ref } from 'vue'
 import { useGameStore } from '../stores/game'
+import { useModalStore } from "../stores/modal.js";
+const modal = useModalStore()
 const game = useGameStore()
 import { startGame } from '../composables/GameController'
 
-const isStartRuleOpen = ref(true)
-const isRuleOpen = ref(false)
-
 function toggleRule() {
-  isStartRuleOpen.value = !isStartRuleOpen.value
+  modal.toggleRule()
 }
 
 function checkRule() {
-  isRuleOpen.value = !isRuleOpen.value
+  modal.checkRule()
 }
-
-defineExpose({
-  checkRule,
-})
 
 </script>
 
 <template>
-  <div class="game-rule" v-if="isStartRuleOpen || isRuleOpen">
+  <div class="game-rule" v-if="modal.isStartRuleOpen|| modal.isRuleOpen">
     <div class="game-rule-content">
       <div class="game-rule-text" >
         <p><h1>Game rule</h1></p>
@@ -36,8 +31,8 @@ defineExpose({
           <li>If the distance is 3–4 tiles: deduct 0.5 heart.</li>
         </ul>
       </div>
-      <span class="Btn" @click="toggleRule(); startGame()" v-if="isStartRuleOpen">Start Game</span>
-      <span class="Btn" @click="checkRule" v-if="isRuleOpen">Keep Game</span>
+      <span class="Btn" @click="toggleRule(); startGame()" v-if="modal.isStartRuleOpen">Start Game</span>
+      <span class="Btn" @click="checkRule" v-if="modal.isRuleOpen">Keep Game</span>
     </div>
   </div>
 </template>

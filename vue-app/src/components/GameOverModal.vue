@@ -1,28 +1,28 @@
 <script setup>
 import { ref, watch } from 'vue'
-import {useGameStore} from "../stores/game.js";
+import { useGameStore } from "../stores/game.js";
+import { useModalStore } from "../stores/modal.js";
 import { storeToRefs} from "pinia";
-
 import { startGame } from '../composables/GameController'
+
 const game = useGameStore()
+const modal = useModalStore()
 const { Gameresult } = storeToRefs(game)
 
-const isGameResultOpen = ref(false)
-
 watch(() => Gameresult.value, (newResult) => {
-  if (newResult) {
-    isGameResultOpen.value = true
+  if (newResult === 'red' || newResult === 'blue') {
+    modal.isGameResultOpen = true
   }
 })
 
 function toggleResult() {
-  isGameResultOpen.value = !isGameResultOpen.value
+  modal.toggleResult()
 }
 
 </script>
 
 <template>
-    <div class="game-result" v-if="isGameResultOpen">
+    <div class="game-result" v-if="modal.isGameResultOpen">
       <div class="game-result-content">
         <div class="game-result-text" >
           <h1>Game Result</h1>

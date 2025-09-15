@@ -5,12 +5,11 @@ import HealthBar from "../components/HealthBar.vue";
 import GameRule from "../components/GameRule.vue";
 import GameAction from "../components/GameAction.vue";
 import GameOverModal from "../components/GameOverModal.vue";
-import {ref} from "vue";
-
-const gamerule = ref()
+import { useModalStore} from "../stores/modal.js";
+const modal = useModalStore()
 
 function openGameRule() {
-  gamerule.value.checkRule()
+  modal.checkRule()
 }
 
 </script>
@@ -27,7 +26,7 @@ function openGameRule() {
     <div class="battlefield">
       <HealthBar />
       <Battlefield />
-      <GameRule ref="gamerule"/>
+      <GameRule />
       <GameAction />
       <GameOverModal />
 
