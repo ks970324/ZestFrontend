@@ -19,16 +19,6 @@
         *** Wrong password or email ***
       </div>
 
-      <label for="remember" class="remember">
-        <input
-            type="checkbox"
-            id="remember"
-            v-model="remember"
-            name="remember"
-        />
-        Remember me
-      </label>
-
       <div class="buttons">
         <LoginAction type="submit">
           <template #login>
@@ -54,15 +44,12 @@ import { useAuthStore } from '../stores/auth'
 import LoginAction from './LoginAction.vue'
 import { onMounted } from 'vue'
 import { jwtDecode } from 'jwt-decode'
-import axios from "axios";
 
 const token = localStorage.getItem('token')
-const savedremember = localStorage.getItem('remember') === 'true'
 
 const email = ref('')
 const password = ref('')
 const showError = ref(false)
-const remember = ref(savedremember)
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -73,28 +60,15 @@ onMounted(async () => {
     const now = Date.now() / 1000
 
     if (decoded.exp > now) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-      try {
-        const { data } = await axios.get('http://localhost:5057/api/ZestAuth/me')
-        auth.token = token
-        auth.user = data.user
-        router.replace('/gamelobby')
-      } catch {
-        localStorage.removeItem('token')
-        localStorage.removeItem('remember')
-        // auth.logout()
-      }
+      router.replace('/gamelobby')
     } else {
       localStorage.removeItem('token')
-      localStorage.removeItem('remember')
-      // auth.logout()
     }
   }
 })
 
 const handleLogin = async () => {
   const success = await auth.login(email.value, password.value, remember.value)
-
   if (success) {
     router.push('/gamelobby')
   } else {
@@ -125,19 +99,6 @@ const handleLogin = async () => {
 
 }
 
-.remember {
-  display: flex; /* 使用 flex 來排列 checkbox 和文字 */
-  align-items: center;  /* 使 checkbox 和文字垂直置中 */
-  justify-content: center;
-  gap: 15px; /* 調整 checkbox 和文字之間的間距 */
-  margin: 30px 0;
-}
-
-.remember input[type="checkbox"] {
-  width: 20px; /* 調整寬度 */
-  height: 20px; /* 調整高度 */
-  margin: 10px; /* 移除外邊距 */
-}
 
 /* 輸入框聚焦時的效果 */
 .login-form input:focus {
