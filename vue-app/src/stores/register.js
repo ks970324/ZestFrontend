@@ -24,10 +24,12 @@ export const useRegisterStore = defineStore('register', {
 
 
                 const response = await registerApi(this.email, this.password, this.characterspath)
+                console.log("register response:", response);
 
-                if (response.status) {
-                    console.log(response.data)
-                    return response.data
+                const data = response.data
+
+                if (data.status === true) {
+                    return true
                 }
 
             } catch (err) {

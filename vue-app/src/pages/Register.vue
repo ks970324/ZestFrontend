@@ -58,9 +58,9 @@ const handleSubmit = async () => {
 
   const success = await registerStore.register()
 
-  if (success.status === 200) {
+  if (success) {
+    console.log(success)
     successregister.value = true
-
   }
 
 }

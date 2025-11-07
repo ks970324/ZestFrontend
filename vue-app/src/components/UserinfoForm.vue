@@ -29,7 +29,7 @@ watchEffect(() => {
   if (!emaildirty.value && newEmail) emaildirty.value = true
   if (!emaildirty.value) return
 
-  if (!newEmail || newEmail.length < 5 || !newEmail.includes("@")) {
+  if (newEmail.length < 5 || !newEmail.includes("@")) {
     emailError.value = true;
     return} else { emailError.value = false }
 
