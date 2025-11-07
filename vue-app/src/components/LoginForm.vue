@@ -55,7 +55,7 @@ const auth = useAuthStore()
 const router = useRouter()
 
 onMounted(async () => {
-  if (token && savedremember) {
+  if (token) {
     const decoded = jwtDecode(token)
     const now = Date.now() / 1000
 
@@ -68,7 +68,7 @@ onMounted(async () => {
 })
 
 const handleLogin = async () => {
-  const success = await auth.login(email.value, password.value, remember.value)
+  const success = await auth.login(email.value, password.value)
   if (success) {
     router.push('/gamelobby')
   } else {

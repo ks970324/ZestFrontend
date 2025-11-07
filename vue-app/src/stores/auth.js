@@ -1,6 +1,6 @@
 // 📁 src/stores/auth.js
 import { defineStore } from 'pinia'
-import { loginApi } from '../services/authApi'
+import { loginApi } from '../services/authapi'
 import { getcharacterApi } from '../services/getcharacter'
 import axios from 'axios'
 
@@ -15,23 +15,19 @@ export const useAuthStore = defineStore('auth', {
     }),
 
     actions: {
-        async login(email, password,remember) {
+        async login(email, password) {
             try {
-                const { data } = await loginApi(email,password,remember)
+                const { data } = await loginApi(email,password)
 
                 if (data.status) {
                     this.user = { email }
                     this.loginError = null
                     this.token = data.token
-                    this.remember = data.remember
 
                     // save token
                     localStorage.setItem('token', data.token)
 
                     axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
-
-                    // save remember
-                    localStorage.setItem('remember', data.remember)
 
                     // save user
                     localStorage.setItem('user', JSON.stringify(this.user))
@@ -62,6 +58,8 @@ export const useAuthStore = defineStore('auth', {
                 return false
             }
         },
+
+
 
 
     },
