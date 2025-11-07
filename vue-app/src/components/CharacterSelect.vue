@@ -85,7 +85,6 @@ const characterImage = computed(() => {
 
 watch(character, () => {
   registerStore.characterspath = characterImage.value
-  console.log('character path updated:', characterImage.value)
 }, { deep: true, immediate: true })
 
 </script>
